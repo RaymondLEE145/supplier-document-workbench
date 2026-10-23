@@ -1,0 +1,12 @@
+{
+  "captured_at": "2026-10-23T14:32:00+08:00",
+  "method": "POST",
+  "url": "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryImpTariffRate",
+  "request_headers": {
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "Referer": "https://online.customs.gov.cn/ociswebserver/pages/jckspsl/index.html"
+  },
+  "request_body": "param={\"gName\":\"\",\"codeTs\":\"841451\",\"sysDate\":\"2026-10-23\",\"nextPage\":1,\"pageSize\":\"20\"}",
+  "response_status": 200,
+  "response_body": "{\"res\":\"{statue:1,message:\\\"查询成功\\\",totalCount:7,data:[{\\\"codeTs\\\":\\\"8414511000\\\",\\\"gName\\\":\\\"功率≤125w的吊扇\\\",\\\"impDiscountRate\\\":\\\"6%\\\",\\\"impOrdinaryRate\\\":\\\"130%\\\",\\\"impTempRate\\\":\\\"\\\"},{\\\"codeTs\\\":\\\"8414512000\\\",\\\"gName\\\":\\\"其他功率≤125w的换气扇\\\",\\\"impDiscountRate\\\":\\\"6%\\\",\\\"impOrdinaryRate\\\":\\\"130%\\\",\\\"impTempRate\\\":\\\"\\\"},{\\\"codeTs\\\":\\\"8414513000\\\",\\\"gName\\\":\\\"功率≤125w有旋转导风轮的风扇\\\",\\\"impDiscountRate\\\":\\\"6%\\\",\\\"impOrdinaryRate\\\":\\\"130%\\\",\\\"impTempRate\\\":\\\"\\\"},{\\\"codeTs\\\":\\\"8414519100\\\",\\\"gName\\\":\\\"功率≤125w的台扇\\\",\\\"impDiscountRate\\\":\\\"6%\\\",\\\"impOrdinaryRate\\\":\\\"130%\\\",\\\"impTempRate\\\":\\\"\\\"},{\\\"codeTs\\\":\\\"8414519200\\\",\\\"gName\\\":\\\"功率≤125w的落地扇\\\",\\\"impDiscountRate\\\":\\\"6%\\\",\\\"impOrdinaryRate\\\":\\\"130%\\\",\\\"impTempRate\\\":\\\"\\\"},{\\\"codeTs\\\":\\\"8414519300\\\",\\\"gName\\\":\\\"功率≤125w的壁扇\\\",\\\"impDiscountRate\\\":\\\"6%\\\",\\\"impOrdinaryRate\\\":\\\"130%\\\",\\\"impTempRate\\\":\\\"\\\"},{\\\"codeTs\\\":\\\"8414519900\\\",\\\"gName\\\":\\\"其他功率≤125w其他风机、风扇\\\",\\\"impDiscountRate\\\":\\\"6%\\\",\\\"impOrdinaryRate\\\":\\\"130%\\\",\\\"impTempRate\\\":\\\"\\\"}]}\",\"statue\":\"0\",\"message\":\"查询成功\"}"
+}
