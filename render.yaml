@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: supplier-document-workbench
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8000
+    disk:
+      name: workbench-data
+      mountPath: /app/data
+      sizeGB: 1
