@@ -7,7 +7,9 @@
 ## 1. 当前运行地址
 
 - 本机：<http://127.0.0.1:8000>
-- 公网：**正在部署正式 HTTPS 域名（GitHub + Render）**。不要再分享 `bore.pub` / `127.0.0.1` 这类临时调试地址；它们不是可对外分享的正式站点。
+- **GitHub 仓库**：<https://github.com/RaymondLEE145/supplier-document-workbench>
+- **GitHub Pages 展示页（可分享到微信）**：<https://raymondlee145.github.io/supplier-document-workbench/>
+- 完整交互平台（上传/解析/确认/导出）需要后端；Render 部署步骤见 [DEPLOY.md](DEPLOY.md)。Pages 只做静态展示与 HS 查询，不能运行 Python 后端。
 
 ## 2. 核心能力
 
