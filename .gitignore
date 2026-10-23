@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.github_token
+.env
+data/uploads/*
+data/outputs/*
+data/scripts/*
+data/state/*
+data/compliance_cache.json
+data/abf_guide.pdf
+!data/uploads/.gitkeep
+!data/outputs/.gitkeep
+!data/scripts/.gitkeep
+!data/state/.gitkeep
+tools/*.png
