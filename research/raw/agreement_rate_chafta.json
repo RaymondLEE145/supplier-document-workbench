@@ -1,0 +1,42 @@
+{
+  "captured_at": "2026-10-23T14:25:00+08:00",
+  "description": "Agreement-rate queries used by the official 税率查询 detail page (更多税率 → 进口协定税率) to display ChAFTA preferential rates for China imports.",
+  "calls": [
+    {
+      "method": "POST",
+      "url": "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryAgreementRate",
+      "request_body": "param={\"codeTs\":\"9401790000\",\"sysDate\":\"2026-10-23\"}",
+      "response_status": 200,
+      "response_body": "{\"res\":\"{statue:1,message:\\\"查询成功\\\",totalCount:26,data:[{\\\"agreementName\\\":\\\"特别协定4\\\",\\\"agreementCode\\\":\\\"94\\\",\\\"impAgreementRate\\\":\\\"10%\\\"},{\\\"agreementName\\\":\\\"特别协定3\\\",\\\"agreementCode\\\":\\\"93\\\",\\\"impAgreementRate\\\":\\\"10%\\\"},{\\\"agreementName\\\":\\\"中国韩国自贸协定\\\",\\\"agreementCode\\\":\\\"19\\\",\\\"impAgreementRate\\\":\\\"0\\\"},{\\\"agreementName\\\":\\\"中国-瑞士自由贸易协定\\\",\\\"agreementCode\\\":\\\"17\\\",\\\"impAgreementRate\\\":\\\"0\\\"},{\\\"agreementName\\\":\\\"RCEP区域全面经济伙伴关系协定\\\",\\\"agreementCode\\\":\\\"22\\\",\\\"impAgreementRate\\\":\\\"0\\\"},{\\\"agreementName\\\":\\\"中国-柬埔寨自贸协定\\\",\\\"agreementCode\\\":\\\"23\\\",\\\"impAgreementRate\\\":\\\"0\\\"},{\\\"agreementName\\\":\\\"中国澳大利亚自贸协定\\\",\\\"agreementCode\\\":\\\"18\\\",\\\"impAgreementRate\\\":\\\"0\\\"},{\\\"agreementName\\\":\\\"中国尼加拉瓜自贸协定\\\",\\\"agreementCode\\\":\\\"24\\\",\\\"impAgreementRate\\\":\\\"0\\\"}]}\",\"statue\":\"0\",\"message\":\"查询成功\"}",
+      "note": "agreementName/agreementCode/impAgreementRate shown verbatim; list of 26 agreements abbreviated after the 8th entry because the remaining agreements are not relevant to ChAFTA. The ChAFTA row (agreementCode 18) is verbatim."
+    },
+    {
+      "method": "POST",
+      "url": "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryCountryAgreementRate",
+      "request_body": "param={\"codeTs\":\"9401790000\",\"sysDate\":\"2026-10-23\",\"agreementCode\":\"18\"}",
+      "response_status": 200,
+      "response_body": "{\"res\":\"{statue:1,message:\\\"查询成功\\\",totalCount:1,data:[{\\\"conuntryName\\\":\\\"澳大利亚\\\",\\\"impAgreementRate\\\":\\\"0\\\"}]}\",\"statue\":\"0\",\"message\":\"查询成功\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryCountryAgreementRate",
+      "request_body": "param={\"codeTs\":\"9403609990\",\"sysDate\":\"2026-10-23\",\"agreementCode\":\"18\"}",
+      "response_status": 200,
+      "response_body": "{\"res\":\"{statue:1,message:\\\"查询成功\\\",totalCount:1,data:[{\\\"conuntryName\\\":\\\"澳大利亚\\\",\\\"impAgreementRate\\\":\\\"0\\\"}]}\",\"statue\":\"0\",\"message\":\"查询成功\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryCountryAgreementRate",
+      "request_body": "param={\"codeTs\":\"9403200000\",\"sysDate\":\"2026-10-23\",\"agreementCode\":\"18\"}",
+      "response_status": 200,
+      "response_body": "{\"res\":\"{statue:1,message:\\\"查询成功\\\",totalCount:1,data:[{\\\"conuntryName\\\":\\\"澳大利亚\\\",\\\"impAgreementRate\\\":\\\"0\\\"}]}\",\"statue\":\"0\",\"message\":\"查询成功\"}"
+    },
+    {
+      "method": "POST",
+      "url": "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryCountryAgreementRate",
+      "request_body": "param={\"codeTs\":\"9401719000\",\"sysDate\":\"2026-10-23\",\"agreementCode\":\"18\"}",
+      "response_status": 200,
+      "response_body": "{\"res\":\"{statue:1,message:\\\"查询成功\\\",totalCount:1,data:[{\\\"conuntryName\\\":\\\"澳大利亚\\\",\\\"impAgreementRate\\\":\\\"0\\\"}]}\",\"statue\":\"0\",\"message\":\"查询成功\"}"
+    }
+  ]
+}
