@@ -1,0 +1,1122 @@
+{
+  "verified_at": "2026-10-23T14:17:39+08:00",
+  "manifest_path": "testdata/manifest.json",
+  "check_count": 214,
+  "failure_count": 0,
+  "ok": true,
+  "checks": [
+    {
+      "check": "manifest: item count",
+      "ok": true,
+      "detail": "9"
+    },
+    {
+      "check": "manifest: document count",
+      "ok": true,
+      "detail": "5"
+    },
+    {
+      "check": "manifest: supplier count",
+      "ok": true,
+      "detail": "3"
+    },
+    {
+      "check": "manifest: item keys",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item A-1 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item A-1 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item A-1 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item A-1 CBM math",
+      "ok": true,
+      "detail": "32.86 vs 32.86"
+    },
+    {
+      "check": "manifest: item A-2 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item A-2 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item A-2 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item A-2 CBM math",
+      "ok": true,
+      "detail": "13.86 vs 13.86"
+    },
+    {
+      "check": "manifest: item A-3 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item A-3 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item A-3 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item A-3 CBM math",
+      "ok": true,
+      "detail": "4.68 vs 4.68"
+    },
+    {
+      "check": "manifest: item B-1 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item B-1 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item B-1 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item B-1 CBM math",
+      "ok": true,
+      "detail": "13.95 vs 13.95"
+    },
+    {
+      "check": "manifest: item B-2 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item B-2 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item B-2 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item B-2 CBM math",
+      "ok": true,
+      "detail": "9.26 vs 9.26"
+    },
+    {
+      "check": "manifest: item B-3 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item B-3 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item B-3 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item B-3 CBM math",
+      "ok": true,
+      "detail": "32.86 vs 32.86"
+    },
+    {
+      "check": "manifest: item C-1 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item C-1 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item C-1 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item C-1 CBM math",
+      "ok": true,
+      "detail": "2.74 vs 2.74"
+    },
+    {
+      "check": "manifest: item C-2 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item C-2 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item C-2 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item C-2 CBM math",
+      "ok": true,
+      "detail": "10.13 vs 10.13"
+    },
+    {
+      "check": "manifest: item C-3 schema",
+      "ok": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "manifest: item C-3 pieces math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item C-3 amount math",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: item C-3 CBM math",
+      "ok": true,
+      "detail": "5.78 vs 5.78"
+    },
+    {
+      "check": "manifest: supplier_a totals match expected",
+      "ok": true,
+      "detail": "{'cartons': 265, 'total_pieces': 1170, 'amount': 26980.0, 'gross_weight_kg': 6770, 'net_weight_kg': 6250, 'cbm': 51.4, 'item_count': 3} vs {'cartons': 265, 'total_pieces': 1170, 'amount': 26980.0, 'gross_weight_kg': 6770, 'net_weight_kg': 6250, 'cbm': 51.4, 'item_count': 3}"
+    },
+    {
+      "check": "manifest: supplier_a manifest totals",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_b totals match expected",
+      "ok": true,
+      "detail": "{'cartons': 210, 'total_pieces': 1190, 'amount': 26020.0, 'gross_weight_kg': 4580, 'net_weight_kg': 4080, 'cbm': 56.07, 'item_count': 3} vs {'cartons': 210, 'total_pieces': 1190, 'amount': 26020.0, 'gross_weight_kg': 4580, 'net_weight_kg': 4080, 'cbm': 56.07, 'item_count': 3}"
+    },
+    {
+      "check": "manifest: supplier_b manifest totals",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_c totals match expected",
+      "ok": true,
+      "detail": "{'cartons': 115, 'total_pieces': 470, 'amount': 9556.0, 'gross_weight_kg': 2330, 'net_weight_kg': 2040, 'cbm': 18.65, 'item_count': 3} vs {'cartons': 115, 'total_pieces': 470, 'amount': 9556.0, 'gross_weight_kg': 2330, 'net_weight_kg': 2040, 'cbm': 18.65, 'item_count': 3}"
+    },
+    {
+      "check": "manifest: supplier_c manifest totals",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: grand totals match expected",
+      "ok": true,
+      "detail": "{'cartons': 590, 'total_pieces': 2830, 'amount': 62556.0, 'gross_weight_kg': 13680, 'net_weight_kg': 12370, 'cbm': 126.12, 'item_count': 9, 'document_count': 5, 'supplier_count': 3} vs {'cartons': 590, 'total_pieces': 2830, 'amount': 62556.0, 'gross_weight_kg': 13680, 'net_weight_kg': 12370, 'cbm': 126.12, 'item_count': 9, 'document_count': 5, 'supplier_count': 3}"
+    },
+    {
+      "check": "manifest: exactly one missing HS",
+      "ok": true,
+      "detail": "missing=['B-2']"
+    },
+    {
+      "check": "manifest: duplicate pair",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: duplicate field name_en",
+      "ok": true,
+      "detail": "Metal Dining Chair != Metal Dining Chair"
+    },
+    {
+      "check": "manifest: duplicate field model",
+      "ok": true,
+      "detail": "DC-2018 != DC-2018"
+    },
+    {
+      "check": "manifest: duplicate field hs_code",
+      "ok": true,
+      "detail": "9401790000 != 9401790000"
+    },
+    {
+      "check": "manifest: duplicate field cartons",
+      "ok": true,
+      "detail": "120 != 120"
+    },
+    {
+      "check": "manifest: duplicate field pieces_per_carton",
+      "ok": true,
+      "detail": "6 != 6"
+    },
+    {
+      "check": "manifest: duplicate field total_pieces",
+      "ok": true,
+      "detail": "720 != 720"
+    },
+    {
+      "check": "manifest: duplicate field unit_price",
+      "ok": true,
+      "detail": "18.5 != 18.5"
+    },
+    {
+      "check": "manifest: duplicate field amount",
+      "ok": true,
+      "detail": "13320.0 != 13320.0"
+    },
+    {
+      "check": "manifest: duplicate field gross_weight_kg",
+      "ok": true,
+      "detail": "2340 != 2340"
+    },
+    {
+      "check": "manifest: duplicate field net_weight_kg",
+      "ok": true,
+      "detail": "2100 != 2100"
+    },
+    {
+      "check": "manifest: duplicate field dimensions_cm",
+      "ok": true,
+      "detail": "{'l': 62, 'w': 48, 'h': 92} != {'l': 62, 'w': 48, 'h': 92}"
+    },
+    {
+      "check": "manifest: duplicate field cbm",
+      "ok": true,
+      "detail": "32.86 != 32.86"
+    },
+    {
+      "check": "manifest: supplier_a name EN",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_a name ZH",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_a contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_a invoice",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_a date",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_b name EN",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_b name ZH",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_b contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_b invoice",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_b date",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_c name EN",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_c name ZH",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_c contract",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_c invoice",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: supplier_c date",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: destination Melbourne",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: incoterm CIF",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_a_packing file exists",
+      "ok": true,
+      "detail": "D:\\Backup\\Documents\\deepseek-harness\\default-workspace\\repo\\testdata\\supplier_a_ningbo_homeline\\packing_list.pdf"
+    },
+    {
+      "check": "manifest: doc_a_packing bytes match",
+      "ok": true,
+      "detail": "27788 vs 27788"
+    },
+    {
+      "check": "manifest: doc_a_packing sha256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_a_packing item keys",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_a_invoice file exists",
+      "ok": true,
+      "detail": "D:\\Backup\\Documents\\deepseek-harness\\default-workspace\\repo\\testdata\\supplier_a_ningbo_homeline\\commercial_invoice.pdf"
+    },
+    {
+      "check": "manifest: doc_a_invoice bytes match",
+      "ok": true,
+      "detail": "26240 vs 26240"
+    },
+    {
+      "check": "manifest: doc_a_invoice sha256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_a_invoice item keys",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_b_packing file exists",
+      "ok": true,
+      "detail": "D:\\Backup\\Documents\\deepseek-harness\\default-workspace\\repo\\testdata\\supplier_b_foshan_sunrise\\packing_list.xlsx"
+    },
+    {
+      "check": "manifest: doc_b_packing bytes match",
+      "ok": true,
+      "detail": "6782 vs 6782"
+    },
+    {
+      "check": "manifest: doc_b_packing sha256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_b_packing item keys",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_b_invoice file exists",
+      "ok": true,
+      "detail": "D:\\Backup\\Documents\\deepseek-harness\\default-workspace\\repo\\testdata\\supplier_b_foshan_sunrise\\commercial_invoice.xlsx"
+    },
+    {
+      "check": "manifest: doc_b_invoice bytes match",
+      "ok": true,
+      "detail": "6715 vs 6715"
+    },
+    {
+      "check": "manifest: doc_b_invoice sha256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_b_invoice item keys",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_c_packing file exists",
+      "ok": true,
+      "detail": "D:\\Backup\\Documents\\deepseek-harness\\default-workspace\\repo\\testdata\\supplier_c_guangzhou_evergreen\\packing_list_scan.png"
+    },
+    {
+      "check": "manifest: doc_c_packing bytes match",
+      "ok": true,
+      "detail": "119573 vs 119573"
+    },
+    {
+      "check": "manifest: doc_c_packing sha256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "manifest: doc_c_packing item keys",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: page count == 1",
+      "ok": true,
+      "detail": "pages=1"
+    },
+    {
+      "check": "doc_a_packing: PDF text layer is non-trivial",
+      "ok": true,
+      "detail": "chars=1512"
+    },
+    {
+      "check": "doc_a_packing: no embedded page image (text-only PDF)",
+      "ok": true,
+      "detail": "images=0"
+    },
+    {
+      "check": "doc_a_packing: contains NINGBO HOMELINE IMP.&EXP. CO., LTD",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: contains HL-2026-0408",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: contains HL-INV-260408",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: contains HSCODE",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: contains CBM",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: contains TOTAL",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: Chinese title present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: item EN A-1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: item ZH A-1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: HS 9401790000",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: item EN A-2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: item ZH A-2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: HS 9403600000",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: item EN A-3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: item ZH A-3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: HS 7326909000",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: total cartons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: total pieces",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: gross weight",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: CBM total",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: pypdf extracts company name",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_packing: pypdf extracts invoice no",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: page count == 1",
+      "ok": true,
+      "detail": "pages=1"
+    },
+    {
+      "check": "doc_a_invoice: PDF text layer is non-trivial",
+      "ok": true,
+      "detail": "chars=1535"
+    },
+    {
+      "check": "doc_a_invoice: no embedded page image (text-only PDF)",
+      "ok": true,
+      "detail": "images=0"
+    },
+    {
+      "check": "doc_a_invoice: contains NINGBO HOMELINE IMP.&EXP. CO., LTD",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: contains HL-2026-0408",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: contains HL-INV-260408",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: contains HSCODE",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: contains CBM",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: contains TOTAL",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: Chinese title present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: item EN A-1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: item ZH A-1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: HS 9401790000",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: item EN A-2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: item ZH A-2",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: HS 9403600000",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: item EN A-3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: item ZH A-3",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: HS 7326909000",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: total cartons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: total pieces",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: gross weight",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: CBM total",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: grand amount",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: SAY TOTAL line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: pypdf extracts company name",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_a_invoice: pypdf extracts invoice no",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: workbook readable",
+      "ok": true,
+      "detail": "sheets=['Packing List']"
+    },
+    {
+      "check": "doc_b_packing: company in title row 1",
+      "ok": true,
+      "detail": "A1=FOSHAN SUNRISE FURNITURE CO., LTD"
+    },
+    {
+      "check": "doc_b_packing: title row 2",
+      "ok": true,
+      "detail": "A2=PACKING LIST / 装箱清单"
+    },
+    {
+      "check": "doc_b_packing: title row 2 is in row 2 (two title rows)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: header A row",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: header B cartons first",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: header E HS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 5 cartons",
+      "ok": true,
+      "detail": "50 vs 50"
+    },
+    {
+      "check": "doc_b_packing: row 5 name EN",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 5 name ZH",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 5 HS",
+      "ok": true,
+      "detail": "cell=9401690000 expected=9401690000"
+    },
+    {
+      "check": "doc_b_packing: row 5 total pcs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 5 CBM",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 6 cartons",
+      "ok": true,
+      "detail": "40 vs 40"
+    },
+    {
+      "check": "doc_b_packing: row 6 name EN",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 6 name ZH",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 6 HS",
+      "ok": true,
+      "detail": "cell=None expected=None"
+    },
+    {
+      "check": "doc_b_packing: row 6 total pcs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 6 CBM",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 7 cartons",
+      "ok": true,
+      "detail": "120 vs 120"
+    },
+    {
+      "check": "doc_b_packing: row 7 name EN",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 7 name ZH",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 7 HS",
+      "ok": true,
+      "detail": "cell=9401790000 expected=9401790000"
+    },
+    {
+      "check": "doc_b_packing: row 7 total pcs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: row 7 CBM",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: total cartons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: total pieces",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: total net",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: total gross",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: total CBM",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_packing: merged title cells present",
+      "ok": true,
+      "detail": "merges=['A10:M10', 'A1:M1', 'A2:H2', 'A3:B3', 'A9:M9']"
+    },
+    {
+      "check": "doc_b_invoice: workbook readable",
+      "ok": true,
+      "detail": "sheets=['Commercial Invoice']"
+    },
+    {
+      "check": "doc_b_invoice: company in title row 1",
+      "ok": true,
+      "detail": "A1=FOSHAN SUNRISE FURNITURE CO., LTD"
+    },
+    {
+      "check": "doc_b_invoice: title row 2",
+      "ok": true,
+      "detail": "A2=COMMERCIAL INVOICE / 商业发票"
+    },
+    {
+      "check": "doc_b_invoice: title row 2 is in row 2 (two title rows)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: header D MODEL before HS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: header E HS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 6 model",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 6 HS",
+      "ok": true,
+      "detail": "cell=9401690000 expected=9401690000"
+    },
+    {
+      "check": "doc_b_invoice: row 6 cartons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 6 total pcs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 6 unit price",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 6 amount",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 7 model",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 7 HS",
+      "ok": true,
+      "detail": "cell=None expected=None"
+    },
+    {
+      "check": "doc_b_invoice: row 7 cartons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 7 total pcs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 7 unit price",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 7 amount",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 8 model",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 8 HS",
+      "ok": true,
+      "detail": "cell=9401790000 expected=9401790000"
+    },
+    {
+      "check": "doc_b_invoice: row 8 cartons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 8 total pcs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 8 unit price",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: row 8 amount",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: total cartons",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: total pieces",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: total amount",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "doc_b_invoice: merged title cells present",
+      "ok": true,
+      "detail": "merges=['A10:K10', 'A11:K11', 'A12:K12', 'A1:K1', 'A2:D2']"
+    },
+    {
+      "check": "doc_c_packing: image readable",
+      "ok": true,
+      "detail": "size=(1800, 1150)"
+    },
+    {
+      "check": "doc_c_packing: RGB mode",
+      "ok": true,
+      "detail": "mode=RGB"
+    },
+    {
+      "check": "doc_c_packing: file size > 20KB",
+      "ok": true,
+      "detail": "bytes=119573"
+    },
+    {
+      "check": "doc_c_packing: has ink (not blank)",
+      "ok": true,
+      "detail": "dark_fraction=0.0484"
+    },
+    {
+      "check": "doc_c_packing: table rules detected",
+      "ok": true,
+      "detail": "horizontal rule rows=19"
+    }
+  ],
+  "failures": [],
+  "extracted": {
+    "doc_a_packing": {
+      "chars": 1512,
+      "first_300": "PACKING LIST | 装 |  箱 |  清 |  单 | NINGBO HOMELINE IMP.&EXP. CO., LTD | ROOM 1608, HAISU BUSINESS CENTER, NO. 588 NANZHAN ROAD, HAISHU DISTRICT, NINGBO, ZHEJIANG, CHINA | TEL: +86-574-8732-6688 EMAIL: sales@homeline-nb.com | 宁 | 波 | 豪 | 迈 | 进 | 出 | 口 | 有 | 限 | 公 | 司 | 中 | 国 | 浙 | 江 | 省 | 宁 | 波 | 市 | 海 | 曙 | 区 | 南 | 站 | 路 | 588号 | 海 | 曙 | 商 | 务 | 中 | 心 | 1608室 | INVOICE NO. 发 | 票 | 号 | 码",
+      "pypdf_chars": 1442
+    },
+    "doc_a_invoice": {
+      "chars": 1535,
+      "first_300": "COMMERCIAL INVOICE | 商 |  业 |  发 |  票 | NINGBO HOMELINE IMP.&EXP. CO., LTD | ROOM 1608, HAISU BUSINESS CENTER, NO. 588 NANZHAN ROAD, HAISHU DISTRICT, NINGBO, ZHEJIANG, CHINA | TEL: +86-574-8732-6688 EMAIL: sales@homeline-nb.com | 宁 | 波 | 豪 | 迈 | 进 | 出 | 口 | 有 | 限 | 公 | 司 | 中 | 国 | 浙 | 江 | 省 | 宁 | 波 | 市 | 海 | 曙 | 区 | 南 | 站 | 路 | 588号 | 海 | 曙 | 商 | 务 | 中 | 心 | 1608室 | INVOICE NO. 发",
+      "pypdf_chars": 1464
+    },
+    "doc_c_packing": {
+      "width": 1800,
+      "height": 1150,
+      "dark_fraction": 0.04835893719806763,
+      "rule_rows": 19,
+      "note": "no text layer; OCR required"
+    }
+  },
+  "counts": {
+    "documents": 5,
+    "items": 9,
+    "suppliers": 3,
+    "lines_per_document": {
+      "doc_a_packing": 3,
+      "doc_a_invoice": 3,
+      "doc_b_packing": 3,
+      "doc_b_invoice": 3,
+      "doc_c_packing": 3
+    }
+  },
+  "totals": {
+    "cartons": 590,
+    "total_pieces": 2830,
+    "amount": 62556.0,
+    "gross_weight_kg": 13680,
+    "net_weight_kg": 12370,
+    "cbm": 126.12,
+    "item_count": 9,
+    "document_count": 5,
+    "supplier_count": 3
+  }
+}
