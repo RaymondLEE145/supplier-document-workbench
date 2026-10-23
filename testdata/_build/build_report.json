@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-10-23T14:17:37+08:00",
+  "pdf_engine": "reportlab",
+  "python": "3.12.14 (main, Sep  1 2026, 14:17:39) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "win32",
+  "elapsed_seconds": 2.84,
+  "files": [
+    {
+      "path": "testdata/supplier_a_ningbo_homeline/packing_list.pdf",
+      "kind": "pdf",
+      "engine": "reportlab",
+      "bytes": 27788
+    },
+    {
+      "path": "testdata/supplier_a_ningbo_homeline/commercial_invoice.pdf",
+      "kind": "pdf",
+      "engine": "reportlab",
+      "bytes": 26240
+    },
+    {
+      "path": "testdata/supplier_b_foshan_sunrise/packing_list.xlsx",
+      "kind": "xlsx",
+      "engine": "openpyxl",
+      "bytes": 6782
+    },
+    {
+      "path": "testdata/supplier_b_foshan_sunrise/commercial_invoice.xlsx",
+      "kind": "xlsx",
+      "engine": "openpyxl",
+      "bytes": 6715
+    },
+    {
+      "path": "testdata/supplier_c_guangzhou_evergreen/packing_list_scan.png",
+      "kind": "png",
+      "engine": "Pillow",
+      "bytes": 119573
+    }
+  ],
+  "counts": {
+    "suppliers": 3,
+    "documents": 5,
+    "items": 9,
+    "lines_per_document": {
+      "doc_a_packing": 3,
+      "doc_a_invoice": 3,
+      "doc_b_packing": 3,
+      "doc_b_invoice": 3,
+      "doc_c_packing": 3
+    },
+    "missing_hs_items": [
+      "B-2"
+    ],
+    "duplicate_pairs": [
+      [
+        "A-1",
+        "B-3"
+      ]
+    ]
+  },
+  "totals": {
+    "by_supplier": {
+      "supplier_a": {
+        "cartons": 265,
+        "total_pieces": 1170,
+        "amount": 26980.0,
+        "gross_weight_kg": 6770,
+        "net_weight_kg": 6250,
+        "cbm": 51.4,
+        "item_count": 3
+      },
+      "supplier_b": {
+        "cartons": 210,
+        "total_pieces": 1190,
+        "amount": 26020.0,
+        "gross_weight_kg": 4580,
+        "net_weight_kg": 4080,
+        "cbm": 56.07,
+        "item_count": 3
+      },
+      "supplier_c": {
+        "cartons": 115,
+        "total_pieces": 470,
+        "amount": 9556.0,
+        "gross_weight_kg": 2330,
+        "net_weight_kg": 2040,
+        "cbm": 18.65,
+        "item_count": 3
+      }
+    },
+    "grand": {
+      "cartons": 590,
+      "total_pieces": 2830,
+      "amount": 62556.0,
+      "gross_weight_kg": 13680,
+      "net_weight_kg": 12370,
+      "cbm": 126.12,
+      "item_count": 9,
+      "document_count": 5,
+      "supplier_count": 3
+    }
+  },
+  "manifest_sha256": "ab6c3d10ed53a4f2d1eee5c099ceec77b77c0134a8411527997ef0964cf0492f",
+  "manifest_bytes": 35839
+}
