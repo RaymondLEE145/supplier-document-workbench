@@ -17,24 +17,45 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 ---
 
-## 2. 公网访问（正式 HTTPS 部署中）
+## 2. 公网访问
 
-**当前没有可对外分享的正式地址。** 之前用于本地调试的 `bore.pub` HTTP 隧道已停用，不要把它发到微信/群聊：非标准端口 + 明文 HTTP 会被风控当成可疑链接，且任何人都能访问。
+### 已上线：GitHub Pages 展示页（可微信分享）
 
-正式发布采用 GitHub 仓库 + Render：
+```text
+https://raymondlee145.github.io/supplier-document-workbench/
+```
 
-1. 推送仓库到 GitHub（或由你授权后由我推送）
-2. Render → New → Blueprint → 选择仓库
-3. `render.yaml` 自动创建 Docker Web Service + `/api/health` + `/app/data` 持久盘
-4. 得到 `https://<service>.onrender.com`，这是可正常分享的 HTTPS 域名
+- 由 GitHub Pages 托管，正式 HTTPS，不再是 `bore.pub` 非标准端口。
+- 内容：项目介绍、HS 查询、门禁截图、11 行导出样例下载。
+- 限制：Pages 只能托管静态页，不能运行 FastAPI/OCR/海关接口/WPS。
 
-在正式域名完成前，只用本机：
+### 完整平台：GitHub 仓库 + Render
+
+仓库：<https://github.com/RaymondLEE145/supplier-document-workbench>
+
+Render 一键 Blueprint：
+
+```text
+https://render.com/deploy?repo=https://github.com/RaymondLEE145/supplier-document-workbench
+```
+
+登录 Render（可用 GitHub 登录）后按页面提示创建：
+
+- 服务名：`supplier-document-workbench`
+- 运行环境：Docker（读取仓库 `Dockerfile`）
+- 健康检查：`/api/health`
+- 当前 `render.yaml` 是 **free** 计划，不带持久盘；升级到 starter 后取消注释 `disk` 即可持久化 `/app/data`
+- 部署完成地址：`https://<service>.onrender.com`
+
+> 免费 Render 会休眠，首次访问较慢；Windows WPS COM 在 Linux 容器不可用，公式缓存值需在 Excel/WPS 打开时重算，校验会降级为 warning，不阻断导出。
+
+### 本机调试
 
 ```text
 http://127.0.0.1:8000
 ```
 
-`start_public.bat` 仅作本机调试，不要用于对外分享；正式部署后可删除或加访问控制。
+`start_public.bat`（bore）只用于本机调试，**不要再发微信**；正式分享用上面的 GitHub Pages 或 Render 地址。
 
 ---
 
