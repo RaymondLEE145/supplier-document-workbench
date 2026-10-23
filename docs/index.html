@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>供应商单证工作台 · GitHub Pages</title>
+<style>
+:root{--ink:#0f172a;--muted:#64748b;--line:#e3e8ef;--bg:#f6f8fb;--gold:#c8a45c;--gold2:#a98234;--ok:#0f766e;--bad:#9a3412}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.7}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}header{background:#0f172a;color:#fff;padding:16px 0}header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px}.mark{width:38px;height:38px;border-radius:8px;background:var(--gold);color:#0f172a;display:grid;place-items:center;font-size:22px;font-weight:700}
+.brand b{font-size:15px;letter-spacing:.4px}.brand small{display:block;color:#94a3b8;font-size:9px;letter-spacing:2px}
+header a{color:#cbd5e1;text-decoration:none;font-size:12px;margin-left:18px}
+.hero{padding:58px 0 34px}.eyebrow{font-size:10px;letter-spacing:2.4px;color:var(--gold2);font-weight:700}
+h1{font-size:38px;line-height:1.2;margin:12px 0 14px;letter-spacing:-.5px}h1 span{color:var(--gold2)}
+.lead{max-width:760px;color:var(--muted);font-size:15px}.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.badge{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:11px;color:#475569}
+.badge.ok{background:#ecfdf5;border-color:#a7f3d0;color:#047857}.badge.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin:20px 0}.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:0 1px 2px rgba(15,23,42,.03)}
+.card h2{font-size:15px;margin:0 0 6px}.card p{margin:0;color:var(--muted);font-size:12.5px}
+.flow{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.flow span{background:#fbf6ea;border:1px solid #eadfc6;border-radius:6px;padding:5px 8px;font-size:10px;color:#6d5423}
+.flow b{color:#a98234;margin-right:3px}
+input{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px;margin:12px 0;outline:none}input:focus{border-color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:11.5px}th,td{text-align:left;padding:9px 7px;border-bottom:1px solid #eef2f7;vertical-align:top}th{color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+td.cn{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--ok)}td.au{font-family:ui-monospace,Consolas,monospace;color:#475569}
+.note{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:9px;padding:12px 14px;font-size:11.5px;margin:16px 0}
+.btn{display:inline-block;background:#0f172a;color:#fff;text-decoration:none;border-radius:8px;padding:10px 14px;font-size:12px;font-weight:600}.btn.gold{background:var(--gold);color:#0f172a}
+.shot{width:100%;border:1px solid var(--line);border-radius:8px;display:block;margin-top:10px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+footer{border-top:1px solid var(--line);color:#94a3b8;font-size:10px;padding:24px 0;margin-top:30px}
+@media(max-width:800px){.grid,.two{grid-template-columns:1fr}h1{font-size:29px}header a{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand"><div class="mark">单</div><div><b>供应商单证工作台</b><small>SUPPLIER DOCUMENT WORKBENCH</small></div></div>
+<div><a href="#logic">归类逻辑</a><a href="#demo">HS 查询</a><a href="#download">下载样例</a></div></div></header>
+
+<main class="wrap">
+<section class="hero">
+<div class="eyebrow">GITHUB PAGES · STATIC SHOWCASE</div>
+<h1>多供应商单证，<span>汇成一份可交付的出口单证</span></h1>
+<p class="lead">解析 PDF / 图片 / Excel，按供应商去重合并，回填你的 5-Sheet 模板；HS 归类按“中澳协定 → ABF → 中国出口编码为主”的顺序，每条值带官方来源。</p>
+<div class="badges"><span class="badge ok">11 个挖掘机附件 · MISSING HS 0</span><span class="badge ok">导出 19/19 校验</span><span class="badge">ChAFTA 0% / PSR CTH</span><span class="badge warn">本页为静态展示，不运行后端</span></div>
+</section>
+
+<div class="note"><b>重要：</b>GitHub Pages 只能托管静态页面，不能运行 Python/FastAPI、OCR、海关接口或 WPS 重算。这里展示能力与 HS 查询；真实上传、解析、确认、导出请在本机运行完整版本，或使用仓库里的 Docker / Codespaces / Render 配置。</div>
+
+<div class="grid">
+<div class="card" id="logic">
+<div class="eyebrow">CLASSIFICATION ORDER</div><h2>HS 判断逻辑</h2>
+<p>先看中澳协定，再看 ABF，最后用中国海关按品名定 10 位编码；展示与导出以中国编码为主，澳洲编码作为参考。</p>
+<div class="flow"><span><b>01</b> ChAFTA 税号</span><span><b>02</b> 不符合 → ABF 进口税号</span><span><b>03</b> 澳洲参考税号</span><span><b>04</b> 中国海关品名匹配</span><span><b>05</b> 中国出口编码为主</span></div>
+</div>
+<div class="card"><div class="eyebrow">CURRENT RESULT</div><h2>11 行挖掘机附件</h2>
+<table><tr><th>项目</th><th>结果</th></tr>
+<tr><td>supported</td><td><b>44</b></td></tr><tr><td>confirmed</td><td><b>44</b></td></tr>
+<tr><td>unsupported</td><td>11（申报要素等无来源字段）</td></tr><tr><td>missing HS</td><td><b style="color:#047857">0</b></td></tr>
+<tr><td>导出校验</td><td><b>19 / 19</b></td></tr></table></div>
+</div>
+
+<div class="card" id="demo">
+<div class="eyebrow">INTERACTIVE HS LOOKUP</div><h2>查一个商品</h2>
+<p>输入英文/中文品名，例如 excavator、bucket、ripper、挖斗、松土器。</p>
+<input id="q" placeholder="搜索品名 / HS 编码…" autocomplete="off">
+<table><thead><tr><th>商品</th><th>澳洲参考</th><th>ChAFTA</th><th>最终中国编码</th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+
+<div class="two">
+<div class="card"><div class="eyebrow">EXPORT</div><h2>门禁通过</h2><p>当前工作台导出页：SUPPORTED 44 / CONFIRMED 44 / MISSING HS 0。</p><img class="shot" src="assets/ui_export_passed_11.png" alt="导出页门禁通过"></div>
+<div class="card"><div class="eyebrow">EVIDENCE</div><h2>澳洲参考 + 中国编码</h2><p>澳洲参考税号单独展示，中国出口编码作为主值写入模板。</p><img class="shot" src="assets/ui_au_reference_11.png" alt="澳洲参考卡片"></div>
+</div>
+
+<div class="card" id="download">
+<div class="eyebrow">DOWNLOAD</div><h2>下载当前导出样例</h2>
+<p>当前 11 行挖掘机附件，5 个 Sheet，样式/公式/合并保留，服务端 19/19 校验通过。</p>
+<p style="margin-top:12px"><a class="btn gold" href="assets/excavator_11_rows.xlsx">下载 excavator_11_rows.xlsx</a> <a class="btn" href="assets/validation.md">查看验证报告</a></p>
+</div>
+</main>
+<footer><div class="wrap">供应商单证工作台 · GitHub Pages 静态展示 · 完整工具在仓库 README / DEPLOY 中运行</div></footer>
+
+<script>
+let DATA=[];
+fetch('demo.json').then(r=>r.json()).then(d=>{DATA=d;render('');}).catch(()=>{document.getElementById('rows').innerHTML='<tr><td colspan="4">演示数据加载失败</td></tr>';});
+function render(q){q=q.toLowerCase().trim();const rows=DATA.filter(x=>!q||x.name.toLowerCase().includes(q)||x.cn.includes(q)||x.au.includes(q));
+document.getElementById('rows').innerHTML=rows.map(x=>`<tr><td>${x.name}</td><td class="au">${x.au}</td><td>${x.chafta}${x.psr?' / '+x.psr:''}</td><td class="cn">${x.cn}</td></tr>`).join('')||'<tr><td colspan="4">没有匹配，试试 excavator / bucket / 挖斗</td></tr>';}
+document.getElementById('q').addEventListener('input',e=>render(e.target.value));
+</script>
+</body>
+</html>
