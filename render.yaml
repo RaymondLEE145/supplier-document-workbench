@@ -2,14 +2,16 @@ services:
   - type: web
     name: supplier-document-workbench
     runtime: docker
-    plan: starter
+    # Free demo: no persistent disk, service spins down after idle.
+    # Upgrade to starter and add the disk block below for production persistence.
+    plan: free
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
       - key: PORT
         value: 8000
-    disk:
-      name: workbench-data
-      mountPath: /app/data
-      sizeGB: 1
+    # disk:
+    #   name: workbench-data
+    #   mountPath: /app/data
+    #   sizeGB: 1
