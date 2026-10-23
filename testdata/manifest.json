@@ -1,0 +1,1176 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_set": "supplier-documents-australia-2026-04",
+  "description": "Synthetic China -> Australia furniture/hardware export documents for end-to-end supplier-document parsing, normalization and de-duplication tests.",
+  "disclaimer": "All companies, addresses, contracts and prices are fictional; the data is realistic but not taken from any real shipment.",
+  "currency": "USD",
+  "incoterm": "CIF",
+  "incoterm_full": "CIF MELBOURNE",
+  "destination": {
+    "city": "MELBOURNE",
+    "country": "AUSTRALIA",
+    "country_zh": "澳大利亚",
+    "port": "MELBOURNE, AUSTRALIA"
+  },
+  "origin_country": "CHINA",
+  "trade_lane": "CHINA -> AUSTRALIA",
+  "supplier_count": 3,
+  "document_count": 5,
+  "item_count": 9,
+  "suppliers": {
+    "supplier_a": {
+      "id": "supplier_a",
+      "code": "A",
+      "slug": "supplier_a_ningbo_homeline",
+      "name_en": "NINGBO HOMELINE IMP.&EXP. CO., LTD",
+      "name_zh": "宁波豪迈进出口有限公司",
+      "address_en": "ROOM 1608, HAISU BUSINESS CENTER, NO. 588 NANZHAN ROAD, HAISHU DISTRICT, NINGBO, ZHEJIANG, CHINA",
+      "address_zh": "中国浙江省宁波市海曙区南站路588号海曙商务中心1608室",
+      "tel": "+86-574-8732-6688",
+      "email": "sales@homeline-nb.com",
+      "contact": "MS. LILY CHEN",
+      "contact_zh": "陈丽丽",
+      "contract_no": "HL-2026-0408",
+      "invoice_no": "HL-INV-260408",
+      "doc_date": "2026-04-08",
+      "doc_date_text": "2026/04/08",
+      "port_of_loading": "NINGBO, CHINA",
+      "port_of_loading_zh": "中国宁波",
+      "incoterm": "CIF MELBOURNE",
+      "payment": "T/T",
+      "origin": "CHINA",
+      "shipping_mark": "N/M",
+      "buyer_en": "MELBOURNE HOME IMPORTS PTY LTD",
+      "buyer_zh": "墨尔本家居进口有限公司",
+      "buyer_address": "UNIT 5, 88 LOGISTICS DRIVE, TRUGANINA VIC 3029, AUSTRALIA",
+      "bank": "BANK OF CHINA NINGBO BRANCH  SWIFT: BKCHCNBJ95N  A/C NO.: 3901 6688 0012 3456",
+      "document_format": "pdf",
+      "line_item_keys": [
+        "A-1",
+        "A-2",
+        "A-3"
+      ],
+      "totals": {
+        "cartons": 265,
+        "total_pieces": 1170,
+        "amount": 26980.0,
+        "gross_weight_kg": 6770,
+        "net_weight_kg": 6250,
+        "cbm": 51.4,
+        "item_count": 3
+      },
+      "item_count": 3
+    },
+    "supplier_b": {
+      "id": "supplier_b",
+      "code": "B",
+      "slug": "supplier_b_foshan_sunrise",
+      "name_en": "FOSHAN SUNRISE FURNITURE CO., LTD",
+      "name_zh": "佛山市日出家具有限公司",
+      "address_en": "NO. 18 SHUNDE INDUSTRIAL ROAD, LELIU TOWN, SHUNDE DISTRICT, FOSHAN, GUANGDONG, CHINA",
+      "address_zh": "中国广东省佛山市顺德区勒流镇顺德工业路18号",
+      "tel": "+86-757-2566-8899",
+      "email": "export@sunrise-furniture.cn",
+      "contact": "MR. KEVIN LIANG",
+      "contact_zh": "梁凯文",
+      "contract_no": "FSF-2026-0415",
+      "invoice_no": "FSF-INV-260415",
+      "doc_date": "2026-04-15",
+      "doc_date_text": "2026/04/15",
+      "port_of_loading": "SHENZHEN (SHEKOU), CHINA",
+      "port_of_loading_zh": "中国深圳（蛇口）",
+      "incoterm": "CIF MELBOURNE",
+      "payment": "T/T",
+      "origin": "CHINA",
+      "shipping_mark": "N/M",
+      "buyer_en": "AUSTRALIAN HOME & TRADE PTY LTD",
+      "buyer_zh": "澳洲家居贸易有限公司",
+      "buyer_address": "12 DOCKLANDS DRIVE, MELBOURNE VIC 3008, AUSTRALIA",
+      "bank": "BANK OF CHINA FOSHAN BRANCH  SWIFT: BKCHCNBJ44A  A/C NO.: 6789 0012 3456 789",
+      "document_format": "xlsx",
+      "line_item_keys": [
+        "B-1",
+        "B-2",
+        "B-3"
+      ],
+      "totals": {
+        "cartons": 210,
+        "total_pieces": 1190,
+        "amount": 26020.0,
+        "gross_weight_kg": 4580,
+        "net_weight_kg": 4080,
+        "cbm": 56.07,
+        "item_count": 3
+      },
+      "item_count": 3
+    },
+    "supplier_c": {
+      "id": "supplier_c",
+      "code": "C",
+      "slug": "supplier_c_guangzhou_evergreen",
+      "name_en": "GUANGZHOU EVERGREEN HARDWARE CO., LTD",
+      "name_zh": "广州常青五金制品有限公司",
+      "address_en": "NO. 66 HUANAN ROAD, PANYU DISTRICT, GUANGZHOU, GUANGDONG, CHINA",
+      "address_zh": "中国广东省广州市番禺区华南路66号",
+      "tel": "+86-20-8477-6600",
+      "email": "info@evergreen-hw.cn",
+      "contact": "MS. GRACE WU",
+      "contact_zh": "吴嘉丽",
+      "contract_no": "GEG-2026-0420",
+      "invoice_no": "GEG-INV-260420",
+      "doc_date": "2026-04-20",
+      "doc_date_text": "2026/04/20",
+      "port_of_loading": "GUANGZHOU (NANSHA), CHINA",
+      "port_of_loading_zh": "中国广州（南沙）",
+      "incoterm": "CIF MELBOURNE",
+      "payment": "T/T",
+      "origin": "CHINA",
+      "shipping_mark": "N/M",
+      "buyer_en": "SOUTHERN CROSS FURNITURE PTY LTD",
+      "buyer_zh": "南十字家具有限公司",
+      "buyer_address": "45 INDUSTRIAL AVENUE, DANDENONG VIC 3175, AUSTRALIA",
+      "bank": null,
+      "document_format": "png",
+      "line_item_keys": [
+        "C-1",
+        "C-2",
+        "C-3"
+      ],
+      "totals": {
+        "cartons": 115,
+        "total_pieces": 470,
+        "amount": 9556.0,
+        "gross_weight_kg": 2330,
+        "net_weight_kg": 2040,
+        "cbm": 18.65,
+        "item_count": 3
+      },
+      "item_count": 3
+    }
+  },
+  "documents": [
+    {
+      "id": "doc_a_packing",
+      "supplier_id": "supplier_a",
+      "supplier_code": "A",
+      "doc_type": "packing_list",
+      "doc_type_zh": "装箱清单",
+      "format": "pdf",
+      "path": "testdata/supplier_a_ningbo_homeline/packing_list.pdf",
+      "workspace_path": "repo/testdata/supplier_a_ningbo_homeline/packing_list.pdf",
+      "filename": "packing_list.pdf",
+      "line_item_keys": [
+        "A-1",
+        "A-2",
+        "A-3"
+      ],
+      "line_count": 3,
+      "page_count": 1,
+      "engine": "reportlab",
+      "mime_type": "application/pdf",
+      "bytes": 27788,
+      "sha256": "31ec14678dd38fc26fcb7e18d40c74b3a77dfd125bbf8e89b0698d8e71306f14",
+      "extraction_expectations": {
+        "item_count": 3,
+        "expected_item_keys": [
+          "A-1",
+          "A-2",
+          "A-3"
+        ],
+        "expected_names_en": [
+          "Metal Dining Chair",
+          "Wooden Side Table",
+          "Steel Storage Rack"
+        ],
+        "expected_names_zh": [
+          "金属餐椅",
+          "木制边几",
+          "钢制储物架"
+        ],
+        "expected_hs_codes": [
+          "9401790000",
+          "9403600000",
+          "7326909000"
+        ],
+        "text_extractable": true,
+        "text_layer": "real text (embedded TrueType font with ToUnicode CMap), not a rasterised image",
+        "languages": [
+          "EN",
+          "ZH"
+        ],
+        "page_count": 1,
+        "required_keywords": [
+          "NINGBO HOMELINE IMP.&EXP. CO., LTD",
+          "HL-2026-0408",
+          "HL-INV-260408",
+          "HS CODE",
+          "CBM",
+          "TOTAL"
+        ],
+        "expected_total_strings": [
+          "265",
+          "1170",
+          "6,770",
+          "51.40"
+        ]
+      }
+    },
+    {
+      "id": "doc_a_invoice",
+      "supplier_id": "supplier_a",
+      "supplier_code": "A",
+      "doc_type": "commercial_invoice",
+      "doc_type_zh": "商业发票",
+      "format": "pdf",
+      "path": "testdata/supplier_a_ningbo_homeline/commercial_invoice.pdf",
+      "workspace_path": "repo/testdata/supplier_a_ningbo_homeline/commercial_invoice.pdf",
+      "filename": "commercial_invoice.pdf",
+      "line_item_keys": [
+        "A-1",
+        "A-2",
+        "A-3"
+      ],
+      "line_count": 3,
+      "page_count": 1,
+      "engine": "reportlab",
+      "mime_type": "application/pdf",
+      "bytes": 26240,
+      "sha256": "364d52b49d3d81a96f2d6366579ec80d7444ec965d232daf4a1ad7c21e998faf",
+      "extraction_expectations": {
+        "item_count": 3,
+        "expected_item_keys": [
+          "A-1",
+          "A-2",
+          "A-3"
+        ],
+        "expected_names_en": [
+          "Metal Dining Chair",
+          "Wooden Side Table",
+          "Steel Storage Rack"
+        ],
+        "expected_names_zh": [
+          "金属餐椅",
+          "木制边几",
+          "钢制储物架"
+        ],
+        "expected_hs_codes": [
+          "9401790000",
+          "9403600000",
+          "7326909000"
+        ],
+        "text_extractable": true,
+        "text_layer": "real text (embedded TrueType font with ToUnicode CMap), not a rasterised image",
+        "languages": [
+          "EN",
+          "ZH"
+        ],
+        "page_count": 1,
+        "required_keywords": [
+          "NINGBO HOMELINE IMP.&EXP. CO., LTD",
+          "HL-2026-0408",
+          "HL-INV-260408",
+          "HS CODE",
+          "CBM",
+          "TOTAL"
+        ],
+        "expected_total_strings": [
+          "265",
+          "1170",
+          "26,980.00",
+          "51.40"
+        ]
+      }
+    },
+    {
+      "id": "doc_b_packing",
+      "supplier_id": "supplier_b",
+      "supplier_code": "B",
+      "doc_type": "packing_list",
+      "doc_type_zh": "装箱清单",
+      "format": "xlsx",
+      "path": "testdata/supplier_b_foshan_sunrise/packing_list.xlsx",
+      "workspace_path": "repo/testdata/supplier_b_foshan_sunrise/packing_list.xlsx",
+      "filename": "packing_list.xlsx",
+      "line_item_keys": [
+        "B-1",
+        "B-2",
+        "B-3"
+      ],
+      "line_count": 3,
+      "page_count": null,
+      "engine": "openpyxl",
+      "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "bytes": 6782,
+      "sha256": "39ab49bcf77a4cba0bb4cf5932a8f7ee726705f567de6cec74ada260fc924a09",
+      "extraction_expectations": {
+        "sheet_names": [
+          "Packing List"
+        ],
+        "layout": "different from Supplier A: two title rows at the top, cartons column before description, no separate model column",
+        "title_rows": [
+          1,
+          2
+        ],
+        "header_row": 4,
+        "data_rows": [
+          5,
+          6,
+          7
+        ],
+        "totals_row": 8,
+        "item_count": 3,
+        "expected_item_keys": [
+          "B-1",
+          "B-2",
+          "B-3"
+        ],
+        "expected_names_en": [
+          "Outdoor Bench",
+          "Aluminum Folding Chair",
+          "Metal Dining Chair"
+        ],
+        "expected_names_zh": [
+          "户外长椅",
+          "铝合金折叠椅",
+          "金属餐椅"
+        ],
+        "expected_hs_codes": [
+          "9401690000",
+          "9401790000"
+        ],
+        "missing_hs_item_keys": [
+          "B-2"
+        ],
+        "columns": [
+          {
+            "col": "A",
+            "header": "NO.",
+            "meaning": "line_no"
+          },
+          {
+            "col": "B",
+            "header": "CARTONS 箱数",
+            "meaning": "cartons"
+          },
+          {
+            "col": "C",
+            "header": "DESCRIPTION 英文品名",
+            "meaning": "name_en"
+          },
+          {
+            "col": "D",
+            "header": "中文品名",
+            "meaning": "name_zh"
+          },
+          {
+            "col": "E",
+            "header": "HS CODE 海关编码",
+            "meaning": "hs_code"
+          },
+          {
+            "col": "F",
+            "header": "MATERIAL 材质",
+            "meaning": "materials"
+          },
+          {
+            "col": "G",
+            "header": "PCS/CTN 每箱件数",
+            "meaning": "pieces_per_carton"
+          },
+          {
+            "col": "H",
+            "header": "TOTAL PCS 总件数",
+            "meaning": "total_pieces"
+          },
+          {
+            "col": "I",
+            "header": "N.W.(KGS) 净重",
+            "meaning": "net_weight_kg"
+          },
+          {
+            "col": "J",
+            "header": "G.W.(KGS) 毛重",
+            "meaning": "gross_weight_kg"
+          },
+          {
+            "col": "K",
+            "header": "MEAS.(CM) L*W*H 外箱尺寸",
+            "meaning": "dimensions_cm"
+          },
+          {
+            "col": "L",
+            "header": "CBM 方数",
+            "meaning": "cbm"
+          },
+          {
+            "col": "M",
+            "header": "PACKING 包装类型",
+            "meaning": "packing_type"
+          }
+        ],
+        "expected_totals": {
+          "cartons": 210,
+          "total_pieces": 1190,
+          "amount": 26020.0,
+          "gross_weight_kg": 4580,
+          "net_weight_kg": 4080,
+          "cbm": 56.07,
+          "item_count": 3
+        }
+      }
+    },
+    {
+      "id": "doc_b_invoice",
+      "supplier_id": "supplier_b",
+      "supplier_code": "B",
+      "doc_type": "commercial_invoice",
+      "doc_type_zh": "商业发票",
+      "format": "xlsx",
+      "path": "testdata/supplier_b_foshan_sunrise/commercial_invoice.xlsx",
+      "workspace_path": "repo/testdata/supplier_b_foshan_sunrise/commercial_invoice.xlsx",
+      "filename": "commercial_invoice.xlsx",
+      "line_item_keys": [
+        "B-1",
+        "B-2",
+        "B-3"
+      ],
+      "line_count": 3,
+      "page_count": null,
+      "engine": "openpyxl",
+      "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "bytes": 6715,
+      "sha256": "1233cfd1992fd76627f96532ae81af799c94ac74048d7d8a2a2e9bcfe59d9db6",
+      "extraction_expectations": {
+        "sheet_names": [
+          "Commercial Invoice"
+        ],
+        "layout": "different from Supplier A: two title rows, MODEL column before HS CODE, cartons/pieces columns reordered",
+        "title_rows": [
+          1,
+          2
+        ],
+        "header_row": 5,
+        "data_rows": [
+          6,
+          7,
+          8
+        ],
+        "totals_row": 9,
+        "item_count": 3,
+        "expected_item_keys": [
+          "B-1",
+          "B-2",
+          "B-3"
+        ],
+        "expected_names_en": [
+          "Outdoor Bench",
+          "Aluminum Folding Chair",
+          "Metal Dining Chair"
+        ],
+        "expected_names_zh": [
+          "户外长椅",
+          "铝合金折叠椅",
+          "金属餐椅"
+        ],
+        "expected_hs_codes": [
+          "9401690000",
+          "9401790000"
+        ],
+        "missing_hs_item_keys": [
+          "B-2"
+        ],
+        "columns": [
+          {
+            "col": "A",
+            "header": "NO.",
+            "meaning": "line_no"
+          },
+          {
+            "col": "B",
+            "header": "DESCRIPTION 英文品名",
+            "meaning": "name_en"
+          },
+          {
+            "col": "C",
+            "header": "中文品名",
+            "meaning": "name_zh"
+          },
+          {
+            "col": "D",
+            "header": "MODEL 型号",
+            "meaning": "model"
+          },
+          {
+            "col": "E",
+            "header": "HS CODE 海关编码",
+            "meaning": "hs_code"
+          },
+          {
+            "col": "F",
+            "header": "MATERIAL 材质",
+            "meaning": "materials"
+          },
+          {
+            "col": "G",
+            "header": "CARTONS 箱数",
+            "meaning": "cartons"
+          },
+          {
+            "col": "H",
+            "header": "PCS/CTN 每箱件数",
+            "meaning": "pieces_per_carton"
+          },
+          {
+            "col": "I",
+            "header": "TOTAL PCS 计价件数",
+            "meaning": "total_pieces"
+          },
+          {
+            "col": "J",
+            "header": "UNIT PRICE(USD) 单价",
+            "meaning": "unit_price"
+          },
+          {
+            "col": "K",
+            "header": "AMOUNT(USD) 金额",
+            "meaning": "amount"
+          }
+        ],
+        "expected_totals": {
+          "cartons": 210,
+          "total_pieces": 1190,
+          "amount": 26020.0,
+          "gross_weight_kg": 4580,
+          "net_weight_kg": 4080,
+          "cbm": 56.07,
+          "item_count": 3
+        }
+      }
+    },
+    {
+      "id": "doc_c_packing",
+      "supplier_id": "supplier_c",
+      "supplier_code": "C",
+      "doc_type": "packing_list",
+      "doc_type_zh": "装箱清单",
+      "format": "png",
+      "path": "testdata/supplier_c_guangzhou_evergreen/packing_list_scan.png",
+      "workspace_path": "repo/testdata/supplier_c_guangzhou_evergreen/packing_list_scan.png",
+      "filename": "packing_list_scan.png",
+      "line_item_keys": [
+        "C-1",
+        "C-2",
+        "C-3"
+      ],
+      "line_count": 3,
+      "page_count": 1,
+      "engine": "Pillow",
+      "mime_type": "image/png",
+      "bytes": 119573,
+      "sha256": "6c1732722a9fb99e81079650fc7324c5d9360f320f6c1f24b8f7ddea01db8eb1",
+      "extraction_expectations": {
+        "item_count": 3,
+        "expected_item_keys": [
+          "C-1",
+          "C-2",
+          "C-3"
+        ],
+        "expected_names_en": [
+          "Wrought Iron Plant Stand",
+          "Teak Outdoor Bench",
+          "Aluminum Folding Table"
+        ],
+        "expected_names_zh": [
+          "铁艺花架",
+          "柚木户外长椅",
+          "铝合金折叠桌"
+        ],
+        "expected_hs_codes": [
+          "7326209000",
+          "9401690000",
+          "9403200000"
+        ],
+        "text_extractable": false,
+        "text_layer": "none - raster image; parser must run OCR",
+        "image_size_px": {
+          "width": 1800,
+          "height": 1150
+        },
+        "image_mode": "RGB",
+        "ocr_keywords": [
+          "GUANGZHOU EVERGREEN HARDWARE CO., LTD",
+          "GEG-2026-0420",
+          "GEG-INV-260420",
+          "PACKING LIST",
+          "HS CODE",
+          "CBM",
+          "TOTAL"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "key": "A-1",
+      "supplier_id": "supplier_a",
+      "supplier_code": "A",
+      "line_no": 1,
+      "source_documents": [
+        "doc_a_packing",
+        "doc_a_invoice"
+      ],
+      "name_en": "Metal Dining Chair",
+      "name_zh": "金属餐椅",
+      "model": "DC-2018",
+      "hs_code": "9401790000",
+      "hs_code_missing": false,
+      "materials_en": "Steel frame + PU leather",
+      "materials_zh": "钢制框架 + PU皮",
+      "brand": "HOMELINE",
+      "use_en": "Indoor dining seating",
+      "use_zh": "室内餐厅座椅",
+      "process_en": "Cutting, welding, polishing, powder coating, assembly",
+      "process_zh": "下料、焊接、抛光、喷涂、组装",
+      "scenario_en": "Home dining room / restaurant",
+      "scenario_zh": "家庭餐厅 / 餐厅",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 120,
+      "pieces_per_carton": 6,
+      "total_pieces": 720,
+      "unit_price": 18.5,
+      "amount": 13320.0,
+      "currency": "USD",
+      "gross_weight_kg": 2340,
+      "net_weight_kg": 2100,
+      "cbm_per_carton": 0.273792,
+      "cbm": 32.86,
+      "dimensions_cm": {
+        "l": 62,
+        "w": 48,
+        "h": 92
+      },
+      "dimensions_text": "62×48×92",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "packing_list+invoice"
+    },
+    {
+      "key": "A-2",
+      "supplier_id": "supplier_a",
+      "supplier_code": "A",
+      "line_no": 2,
+      "source_documents": [
+        "doc_a_packing",
+        "doc_a_invoice"
+      ],
+      "name_en": "Wooden Side Table",
+      "name_zh": "木制边几",
+      "model": "ST-330",
+      "hs_code": "9403600000",
+      "hs_code_missing": false,
+      "materials_en": "MDF + oak veneer",
+      "materials_zh": "密度板 + 橡木贴皮",
+      "brand": "HOMELINE",
+      "use_en": "Living room side table",
+      "use_zh": "客厅边几",
+      "process_en": "Panel cutting, edge banding, sanding, lacquering, assembly",
+      "process_zh": "开料、封边、打磨、喷漆、组装",
+      "scenario_en": "Living room",
+      "scenario_zh": "客厅",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 80,
+      "pieces_per_carton": 4,
+      "total_pieces": 320,
+      "unit_price": 24.0,
+      "amount": 7680.0,
+      "currency": "USD",
+      "gross_weight_kg": 1180,
+      "net_weight_kg": 1050,
+      "cbm_per_carton": 0.17325,
+      "cbm": 13.86,
+      "dimensions_cm": {
+        "l": 55,
+        "w": 45,
+        "h": 70
+      },
+      "dimensions_text": "55×45×70",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "packing_list+invoice"
+    },
+    {
+      "key": "A-3",
+      "supplier_id": "supplier_a",
+      "supplier_code": "A",
+      "line_no": 3,
+      "source_documents": [
+        "doc_a_packing",
+        "doc_a_invoice"
+      ],
+      "name_en": "Steel Storage Rack",
+      "name_zh": "钢制储物架",
+      "model": "SR-905",
+      "hs_code": "7326909000",
+      "hs_code_missing": false,
+      "materials_en": "Powder-coated steel tube",
+      "materials_zh": "喷涂钢管",
+      "brand": "HOMELINE",
+      "use_en": "Warehouse storage",
+      "use_zh": "仓储收纳",
+      "process_en": "Tube cutting, welding, powder coating, assembly",
+      "process_zh": "切管、焊接、喷涂、组装",
+      "scenario_en": "Warehouse / garage",
+      "scenario_zh": "仓库 / 车库",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 65,
+      "pieces_per_carton": 2,
+      "total_pieces": 130,
+      "unit_price": 46.0,
+      "amount": 5980.0,
+      "currency": "USD",
+      "gross_weight_kg": 3250,
+      "net_weight_kg": 3100,
+      "cbm_per_carton": 0.072,
+      "cbm": 4.68,
+      "dimensions_cm": {
+        "l": 120,
+        "w": 40,
+        "h": 15
+      },
+      "dimensions_text": "120×40×15",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "packing_list+invoice"
+    },
+    {
+      "key": "B-1",
+      "supplier_id": "supplier_b",
+      "supplier_code": "B",
+      "line_no": 1,
+      "source_documents": [
+        "doc_b_packing",
+        "doc_b_invoice"
+      ],
+      "name_en": "Outdoor Bench",
+      "name_zh": "户外长椅",
+      "model": "OB-120",
+      "hs_code": "9401690000",
+      "hs_code_missing": false,
+      "materials_en": "Acacia wood + steel legs",
+      "materials_zh": "相思木 + 钢脚",
+      "brand": "SUNRISE",
+      "use_en": "Outdoor garden seating",
+      "use_zh": "户外花园座椅",
+      "process_en": "Wood cutting, sanding, oil coating, assembly",
+      "process_zh": "木材开料、打磨、涂油、组装",
+      "scenario_en": "Garden / patio",
+      "scenario_zh": "花园 / 庭院",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 50,
+      "pieces_per_carton": 3,
+      "total_pieces": 150,
+      "unit_price": 58.0,
+      "amount": 8700.0,
+      "currency": "USD",
+      "gross_weight_kg": 1680,
+      "net_weight_kg": 1500,
+      "cbm_per_carton": 0.279,
+      "cbm": 13.95,
+      "dimensions_cm": {
+        "l": 155,
+        "w": 45,
+        "h": 40
+      },
+      "dimensions_text": "155×45×40",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "packing_list+invoice"
+    },
+    {
+      "key": "B-2",
+      "supplier_id": "supplier_b",
+      "supplier_code": "B",
+      "line_no": 2,
+      "source_documents": [
+        "doc_b_packing",
+        "doc_b_invoice"
+      ],
+      "name_en": "Aluminum Folding Chair",
+      "name_zh": "铝合金折叠椅",
+      "model": "AF-77",
+      "hs_code": null,
+      "hs_code_missing": true,
+      "materials_en": "Aluminum alloy + textilene",
+      "materials_zh": "铝合金 + 特斯林布",
+      "brand": "SUNRISE",
+      "use_en": "Outdoor portable seating",
+      "use_zh": "户外便携座椅",
+      "process_en": "Aluminum cutting, bending, anodizing, fabric sewing, assembly",
+      "process_zh": "铝材切割、折弯、氧化、缝布、组装",
+      "scenario_en": "Camping / balcony",
+      "scenario_zh": "露营 / 阳台",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 40,
+      "pieces_per_carton": 8,
+      "total_pieces": 320,
+      "unit_price": 12.5,
+      "amount": 4000.0,
+      "currency": "USD",
+      "gross_weight_kg": 560,
+      "net_weight_kg": 480,
+      "cbm_per_carton": 0.23142,
+      "cbm": 9.26,
+      "dimensions_cm": {
+        "l": 58,
+        "w": 38,
+        "h": 105
+      },
+      "dimensions_text": "58×38×105",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "packing_list+invoice"
+    },
+    {
+      "key": "B-3",
+      "supplier_id": "supplier_b",
+      "supplier_code": "B",
+      "line_no": 3,
+      "source_documents": [
+        "doc_b_packing",
+        "doc_b_invoice"
+      ],
+      "name_en": "Metal Dining Chair",
+      "name_zh": "金属餐椅",
+      "model": "DC-2018",
+      "hs_code": "9401790000",
+      "hs_code_missing": false,
+      "materials_en": "Steel frame + PU leather",
+      "materials_zh": "钢制框架 + PU皮",
+      "brand": "SUNRISE",
+      "use_en": "Indoor dining seating",
+      "use_zh": "室内餐厅座椅",
+      "process_en": "Cutting, welding, polishing, powder coating, assembly",
+      "process_zh": "下料、焊接、抛光、喷涂、组装",
+      "scenario_en": "Home dining room / restaurant",
+      "scenario_zh": "家庭餐厅 / 餐厅",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 120,
+      "pieces_per_carton": 6,
+      "total_pieces": 720,
+      "unit_price": 18.5,
+      "amount": 13320.0,
+      "currency": "USD",
+      "gross_weight_kg": 2340,
+      "net_weight_kg": 2100,
+      "cbm_per_carton": 0.273792,
+      "cbm": 32.86,
+      "dimensions_cm": {
+        "l": 62,
+        "w": 48,
+        "h": 92
+      },
+      "dimensions_text": "62×48×92",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "packing_list+invoice"
+    },
+    {
+      "key": "C-1",
+      "supplier_id": "supplier_c",
+      "supplier_code": "C",
+      "line_no": 1,
+      "source_documents": [
+        "doc_c_packing"
+      ],
+      "name_en": "Wrought Iron Plant Stand",
+      "name_zh": "铁艺花架",
+      "model": "PS-210",
+      "hs_code": "7326209000",
+      "hs_code_missing": false,
+      "materials_en": "Steel wire + powder coating",
+      "materials_zh": "铁线 + 喷涂",
+      "brand": "EVERGREEN",
+      "use_en": "Indoor / outdoor plant display",
+      "use_zh": "花木摆放",
+      "process_en": "Wire bending, welding, powder coating",
+      "process_zh": "铁线折弯、焊接、喷涂",
+      "scenario_en": "Garden / balcony",
+      "scenario_zh": "花园 / 阳台",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 30,
+      "pieces_per_carton": 4,
+      "total_pieces": 120,
+      "unit_price": 9.8,
+      "amount": 1176.0,
+      "currency": "USD",
+      "gross_weight_kg": 300,
+      "net_weight_kg": 240,
+      "cbm_per_carton": 0.091392,
+      "cbm": 2.74,
+      "dimensions_cm": {
+        "l": 42,
+        "w": 32,
+        "h": 68
+      },
+      "dimensions_text": "42×32×68",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "manifest_only_no_invoice"
+    },
+    {
+      "key": "C-2",
+      "supplier_id": "supplier_c",
+      "supplier_code": "C",
+      "line_no": 2,
+      "source_documents": [
+        "doc_c_packing"
+      ],
+      "name_en": "Teak Outdoor Bench",
+      "name_zh": "柚木户外长椅",
+      "model": "TB-150",
+      "hs_code": "9401690000",
+      "hs_code_missing": false,
+      "materials_en": "Teak wood",
+      "materials_zh": "柚木",
+      "brand": "EVERGREEN",
+      "use_en": "Outdoor garden seating",
+      "use_zh": "户外花园座椅",
+      "process_en": "Wood cutting, sanding, oil coating, assembly",
+      "process_zh": "木材开料、打磨、涂油、组装",
+      "scenario_en": "Garden / patio",
+      "scenario_zh": "花园 / 庭院",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 25,
+      "pieces_per_carton": 2,
+      "total_pieces": 50,
+      "unit_price": 74.0,
+      "amount": 3700.0,
+      "currency": "USD",
+      "gross_weight_kg": 1010,
+      "net_weight_kg": 900,
+      "cbm_per_carton": 0.405,
+      "cbm": 10.13,
+      "dimensions_cm": {
+        "l": 150,
+        "w": 60,
+        "h": 45
+      },
+      "dimensions_text": "150×60×45",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "manifest_only_no_invoice"
+    },
+    {
+      "key": "C-3",
+      "supplier_id": "supplier_c",
+      "supplier_code": "C",
+      "line_no": 3,
+      "source_documents": [
+        "doc_c_packing"
+      ],
+      "name_en": "Aluminum Folding Table",
+      "name_zh": "铝合金折叠桌",
+      "model": "AT-80",
+      "hs_code": "9403200000",
+      "hs_code_missing": false,
+      "materials_en": "Aluminum alloy",
+      "materials_zh": "铝合金",
+      "brand": "EVERGREEN",
+      "use_en": "Outdoor camping table",
+      "use_zh": "户外露营桌",
+      "process_en": "Aluminum cutting, stamping, anodizing, assembly",
+      "process_zh": "铝材切割、冲压、氧化、组装",
+      "scenario_en": "Camping / picnic",
+      "scenario_zh": "露营 / 野餐",
+      "preferential_tariff": "CHAFTA 0%",
+      "cartons": 60,
+      "pieces_per_carton": 5,
+      "total_pieces": 300,
+      "unit_price": 15.6,
+      "amount": 4680.0,
+      "currency": "USD",
+      "gross_weight_kg": 1020,
+      "net_weight_kg": 900,
+      "cbm_per_carton": 0.09625,
+      "cbm": 5.78,
+      "dimensions_cm": {
+        "l": 70,
+        "w": 25,
+        "h": 55
+      },
+      "dimensions_text": "70×25×55",
+      "packing_type_en": "Export carton",
+      "packing_type_zh": "出口纸箱",
+      "origin_country": "CHINA",
+      "price_source": "manifest_only_no_invoice"
+    }
+  ],
+  "totals_by_supplier": {
+    "supplier_a": {
+      "cartons": 265,
+      "total_pieces": 1170,
+      "amount": 26980.0,
+      "gross_weight_kg": 6770,
+      "net_weight_kg": 6250,
+      "cbm": 51.4,
+      "item_count": 3
+    },
+    "supplier_b": {
+      "cartons": 210,
+      "total_pieces": 1190,
+      "amount": 26020.0,
+      "gross_weight_kg": 4580,
+      "net_weight_kg": 4080,
+      "cbm": 56.07,
+      "item_count": 3
+    },
+    "supplier_c": {
+      "cartons": 115,
+      "total_pieces": 470,
+      "amount": 9556.0,
+      "gross_weight_kg": 2330,
+      "net_weight_kg": 2040,
+      "cbm": 18.65,
+      "item_count": 3
+    }
+  },
+  "grand_totals": {
+    "cartons": 590,
+    "total_pieces": 2830,
+    "amount": 62556.0,
+    "gross_weight_kg": 13680,
+    "net_weight_kg": 12370,
+    "cbm": 126.12,
+    "item_count": 9,
+    "document_count": 5,
+    "supplier_count": 3
+  },
+  "duplicates": [
+    {
+      "id": "dup-metal-dining-chair",
+      "item_keys": [
+        "A-1",
+        "B-3"
+      ],
+      "description": "Supplier A line 1 and Supplier B line 3 are deliberately identical (same product, model, HS code, cartons, pieces/carton, total pieces, unit price and amount) so that cross-supplier de-duplication can be tested.",
+      "match_fields": [
+        "name_en",
+        "model",
+        "hs_code",
+        "cartons",
+        "pieces_per_carton",
+        "total_pieces",
+        "unit_price",
+        "amount",
+        "gross_weight_kg",
+        "net_weight_kg",
+        "dimensions_cm",
+        "cbm"
+      ],
+      "identical_values": {
+        "name_en": "Metal Dining Chair",
+        "name_zh": "金属餐椅",
+        "model": "DC-2018",
+        "hs_code": "9401790000",
+        "cartons": 120,
+        "pieces_per_carton": 6,
+        "total_pieces": 720,
+        "unit_price": 18.5,
+        "amount": 13320.0,
+        "gross_weight_kg": 2340,
+        "net_weight_kg": 2100,
+        "dimensions_cm": {
+          "l": 62,
+          "w": 48,
+          "h": 92
+        },
+        "cbm": 32.86
+      },
+      "expected_behaviour": "Both source lines must still be extracted (6 supplier lines total), but the canonical item list should collapse them into one item and keep both source occurrences."
+    }
+  ],
+  "data_quality_cases": {
+    "missing_hs_code": {
+      "item_key": "B-2",
+      "product": "Aluminum Folding Chair / 铝合金折叠椅",
+      "documents": [
+        "doc_b_packing",
+        "doc_b_invoice"
+      ],
+      "expected_behaviour": "The line must still be extracted from both Supplier B files with hs_code = null; validation should flag a missing/invalid HS code and must not silently merge the line with another item."
+    },
+    "cross_supplier_duplicate": {
+      "duplicate_id": "dup-metal-dining-chair",
+      "item_keys": [
+        "A-1",
+        "B-3"
+      ],
+      "expected_behaviour": "De-duplicate by product/HS/quantity/amount; keep both source occurrences."
+    },
+    "two_title_rows": {
+      "documents": [
+        "doc_b_packing",
+        "doc_b_invoice"
+      ],
+      "expected_behaviour": "Header detection must skip the two title rows (company name + document title) and find the real column header row (row 4 / row 5)."
+    },
+    "text_pdf_vs_scanned_png": {
+      "documents": [
+        "doc_a_packing",
+        "doc_a_invoice",
+        "doc_c_packing"
+      ],
+      "expected_behaviour": "Supplier A PDFs expose a real text layer; Supplier C PNG has no text layer and requires OCR."
+    },
+    "mixed_en_zh": {
+      "documents": [
+        "doc_a_packing",
+        "doc_a_invoice",
+        "doc_b_packing",
+        "doc_b_invoice",
+        "doc_c_packing"
+      ],
+      "expected_behaviour": "Both English and Simplified Chinese labels/content are present and must be extracted; product names exist in both languages."
+    }
+  },
+  "template_mapping": {
+    "workbook": "repo/assets/template.xlsx",
+    "sheets": {
+      "packing_list": "装箱清单",
+      "commercial_invoice": "发票",
+      "declaration_elements": "申报要素",
+      "sales_confirmation": "销货确认书",
+      "customs_declaration": "报关单 "
+    },
+    "sheet_name_note": "The customs-declaration worksheet title is '报关单 ' with a trailing space, matching the provided template exactly.",
+    "population_expectations": {
+      "装箱清单": "supplier packing list fields: description EN/ZH, HS code, materials, cartons, pieces per carton, dimensions L*W*H, CBM, gross weight, packing type; total row.",
+      "发票": "supplier commercial invoice fields: description EN/ZH, HS code, materials, cartons, pieces/carton, total pieces, unit price, amount; total row; contract/invoice no; date.",
+      "申报要素": "per-item brand, product name EN/ZH, HS code, model, material, use, process, scenario, preferential tariff; contract no, destination, date.",
+      "销货确认书": "seller/buyer blocks, contract no, date, items with quantity/unit price/amount, CIF term, destination, payment T/T.",
+      "报关单 ": "contract no, destination country 澳大利亚, incoterm CIF, cartons, pieces, gross/net weight, currency USD, origin CHINA."
+    }
+  },
+  "aggregation_notes": {
+    "cbm": "Per-line CBM = round_half_up(L*W*H/1,000,000 * cartons, 2); totals are sums of the rounded per-line values, so tests can add the manifest line values and match the totals.",
+    "cbm_per_carton": "cbm_per_carton = L*W*H/1,000,000 rounded to 6 decimals (exact for cm dimensions).",
+    "amount": "amount = round_half_up(unit_price * total_pieces, 2).",
+    "weights": "gross/net weights are per line total kilograms.",
+    "missing_hs": "B-2 intentionally has hs_code = null in both Supplier B files and in this manifest."
+  },
+  "created_at": "2026-10-23T14:17:37+08:00",
+  "generator": {
+    "script": "repo/testdata/_build/build_fixtures.py",
+    "data_module": "repo/testdata/_build/fixture_data.py",
+    "pdf_engine": "reportlab",
+    "python": "3.12.14"
+  }
+}
