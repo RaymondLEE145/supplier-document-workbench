@@ -1,1 +1,1 @@
-PENDING_HTTPS_DEPLOY
+https://raymondlee145.github.io/supplier-document-workbench/
