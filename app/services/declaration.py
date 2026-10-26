@@ -181,6 +181,7 @@ def enrich(items: list[dict]) -> list[dict]:
         it["declaration_source"] = el["source_url"] if el["element_text"] else ""
         it["declaration_fields"] = {
             "brand": _brand(it),
+            "model": str(it.get("model") or "无型号"),
             "material": _material(it, hs),
             "usage": _usage(it, hs),
             "processing": _processing(it, hs),
