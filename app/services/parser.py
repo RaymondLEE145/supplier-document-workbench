@@ -297,14 +297,19 @@ def row_text(row: list[Any]) -> str:
 
 
 def is_total_row(row: list[Any]) -> bool:
-    t = _norm(row_text(row))
+    # Only the leading columns identify a totals row. Product descriptions often
+    # contain words like "total 2box" in the packing column and must not be dropped.
+    head = " ".join("" if v is None else str(v) for v in row[:3])
+    t = _norm(head)
     if not t:
         return False
     patterns = ["total", "subtotal", "grand total", "合计", "总计", "小计", "合 计", "t o t a l"]
-    if any(p in t for p in patterns):
-        # avoid treating an item description containing 'total' as total
-        return True
-    return False
+    if not any(p in t for p in patterns):
+        return False
+    name = _norm(str(row[2])) if len(row) > 2 and row[2] is not None else ""
+    if name and name not in {"total", "subtotal", "grand total", "合计", "总计", "小计"}:
+        return False
+    return True
 
 
 def is_empty_row(row: list[Any]) -> bool:
