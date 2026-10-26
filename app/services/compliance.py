@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from ..config import DATA_DIR, RESEARCH_DIR, now_iso
-from . import au_tariff, declaration
+from . import au_tariff, declaration, hs_lexicon
 
 CUSTOMS_QUERY_URL = "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryImpTariffRate"
 CUSTOMS_AGREEMENT_URL = "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryAgreementRate"
@@ -444,6 +444,15 @@ def _pick_china_row(item: dict, au: dict | None, source_hs: str, attempts: list[
         if res.get("rows"):
             best = max(res["rows"], key=lambda r: _cn_score(item, r, au, source_hs))
             return best, "中国海关官网 · 源编码前缀匹配"
+    # 1b) packing lists often have no HS column: use a reviewed product-name seed,
+    # then verify that exact 10-digit code against the official Chinese tariff.
+    for hint in hs_lexicon.candidates(item):
+        res = query_tariff(hint)
+        attempts.append({"kind": "customs", "url": res.get("url"), "query": hint, "http_status": res.get("http_status"),
+                         "rows": len(res.get("rows") or []), "error": res.get("error"), "cache_hit": res.get("cache_hit")})
+        exact = next((r for r in res.get("rows") or [] if str(r.get("codeTs")) == hint), None)
+        if exact:
+            return exact, f"中国海关官网 · 产品名关键词匹配 {hint}"
     # 2) match on the Australian HS6 (the rule: Australia first, China mapping second)
     prefixes = []
     for p in ((au or {}).get("hs6"), (source_hs or "")[:6], (source_hs or "")[:4]):
