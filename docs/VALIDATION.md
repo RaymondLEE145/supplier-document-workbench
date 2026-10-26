@@ -94,7 +94,29 @@
 - SHA-256：`A7664C26FEFBF019B3F40A4061C6B4D02DA764C63A2311686F4E7ACFB053297E`
 - 截图：[导出页 PASSED](ui_export_passed.png)、[工作台首页](ui_home.png)
 
-### 4.3 官方数据源
+### 4.4 单文件上传回归：只填对应表
+
+新增 `tests/test_single_document_export.py`：
+
+| 上传类型 | 填充 | 保持空白 | 校验 |
+|---|---|---|---|
+| 仅装箱单 | 装箱单 + 报关单 + 官方申报要素 | 发票/销售合同 | 14/14 通过 |
+| 仅发票 | 发票 + 报关单 + 官方申报要素 | 装箱单/销售合同 | 12/12 通过 |
+| 仅报关单 | 报关单 + 申报要素 | 装箱单/发票/销售合同 | 10/10 通过 |
+| 仅合同 | 销售合同 + 报关单 + 官方申报要素 | 装箱单/发票 | 8/8 通过 |
+
+验证点：
+
+- 未上传表的数据区和模板示例值被清空，只保留模板标签/样式。
+- 报关单商品项按 HS/品名/数量自动生成；申报要素按中国海关官方 `CusMerchElement` 表匹配，品牌/材质/用途/工艺/场景写入对应列。
+- 不再默认写 `USD / CIF / 一般贸易 / 纸箱包装 / N/M` 或从合同号推导发票号。
+- 仅箱单时发票金额、合同金额保持空白。
+- 导出页新增“本次可填写的单证”卡片，报关单/申报要素标注“自动生成”。
+- 截图：[ui_coverage_packing_only.png](ui_coverage_packing_only.png)
+
+**Render 线上实测（2026-10-26）**：上传仅装箱单 → coverage 只有 `packing_list=true`，导出 **8/8 通过**；发票 `J10`、合同 `H21`、报关单 `B20`、申报要素 `C5` 全部为空；[live_packing_only.xlsx](live_packing_only.xlsx)。
+
+### 4.5 官方数据源
 
 - 澳洲侧：DFAT FTA Portal 官方批量下载（ChAFTA / China）→ 本地索引 [assets/au_chafta_tariff.json](../assets/au_chafta_tariff.json)（9,763 行，含 HS/描述/MFN/2026 税率/PSR）
 - ABF 侧：Working Tariff Schedule 3 章节页（ChAFTA 未列行的 ABF 一般税号/税率回退）
