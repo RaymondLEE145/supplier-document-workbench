@@ -8,8 +8,9 @@
 
 - 本机：<http://127.0.0.1:8000>
 - **GitHub 仓库**：<https://github.com/RaymondLEE145/supplier-document-workbench>
+- **完整平台（Render，可上传/解析/导出）**：<https://supplier-document-workbench.onrender.com>
 - **GitHub Pages 展示页（可分享到微信）**：<https://raymondlee145.github.io/supplier-document-workbench/>
-- 完整交互平台（上传/解析/确认/导出）需要后端；Render 部署步骤见 [DEPLOY.md](DEPLOY.md)。Pages 只做静态展示与 HS 查询，不能运行 Python 后端。
+- 完整交互平台需要后端；GitHub Pages 只做静态展示与 HS 查询，不能运行 Python 后端。
 
 ## 2. 核心能力
 
@@ -41,14 +42,26 @@
 
 本地官方索引：[assets/au_chafta_tariff.json](assets/au_chafta_tariff.json)（9,763 行，来自 DFAT FTA Portal 中国批量下载）。ABF 章节按需抓取并缓存到 `data/abf_chapters/`。
 
-### 2.4 合规门禁
+### 2.4 单文件上传：只填对应表，不补造其他单证
+
+如果只上传一类单证，平台只填它对应的 Sheet，其他 Sheet 保持模板空白：
+
+- 只上传**装箱单** → 只填「装箱单」；发票/销售合同/报关单/申报要素不填，不生成金额、合同号、报关信息。
+- 只上传**发票** → 只填「发票」；不生成箱单、合同、报关单。
+- 只上传**合同** → 只填「销售合同」。
+- 只上传**报关单/申报要素** → 只填对应表。
+- 装箱单 + 发票 → 只填这两张；不会自动补合同/报关单。
+- 中英文品名、HS、已确认的官方溯源信息可补充；缺失的金额、材质、合同号等保持空白，绝不默认 `USD/CIF/一般贸易/纸箱包装` 等值。
+- 导出页会显示「本次可填写的单证」，未上传类型明确置灰。
+
+### 2.5 合规门禁
 
 - 只允许补充：`hs_code`、`declaration_elements`、`product_name_en/zh`、`origin_criterion`、`preference_eligible`。
 - 每个 supported 值必须有 `source_url`、`retrieved_at`、`matched_evidence`；没有证据的字段保持 `unsupported` 并置灰。
 - 申报要素接口返回客户端加密载荷，页面无法取得官方要素表 → **始终 unsupported**，不编造。
 - 未确认的 supported 补充、缺失 HS 均阻断导出；申报要素无来源不阻断，但必须勾选确认。
 
-### 2.5 代码生成与导出
+### 2.6 代码生成与导出
 
 - 每次导出生成独立 Python 脚本：`data/scripts/generated_fill_<id>.py`。
 - 脚本内嵌 payload，AST 白名单校验，子进程执行。
