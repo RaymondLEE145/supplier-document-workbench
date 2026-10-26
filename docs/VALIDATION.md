@@ -116,9 +116,12 @@
 
 ## 6. 公网
 
-- 当前没有可对外分享的正式地址；`bore.pub` HTTP 调试隧道已停用。
-- 正式方案：GitHub 仓库 + Render `https://<service>.onrender.com`（HTTPS、可正常分享）。
-- 不要把临时 HTTP 隧道 / `127.0.0.1` 发到微信；非标准端口会被风控视为可疑链接。
+- **完整平台（Render，HTTPS）**：<https://supplier-document-workbench.onrender.com>
+  - `/api/health` 200；真实上传 2 份 XLSX 后解析出 15 行，测试数据已清理。
+  - 免费实例空闲会休眠，首次打开需等待唤醒；免费实例无持久盘。
+- **GitHub Pages 展示页**：<https://raymondlee145.github.io/supplier-document-workbench/>
+- 仓库：<https://github.com/RaymondLEE145/supplier-document-workbench>
+- `bore.pub` HTTP 调试隧道已停用；不要分享临时端口地址。
 - 部署步骤见 [DEPLOY.md](../DEPLOY.md)。
 
 ## 7. 复现命令
