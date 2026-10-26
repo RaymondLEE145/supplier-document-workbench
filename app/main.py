@@ -546,13 +546,15 @@ async def upload(supplier_id: str = Form(...), files: list[UploadFile] = File(..
                 done += 1
                 job_service.log(job_id, f"{item['filename']} 重复，已按 Hash 去重", phase="去重")
                 continue
-            result = parser.parse_file(Path(item["path"]), item["filename"])
-            # Keep only structured parse results; never retain the uploaded binary.
             try:
-                Path(item["path"]).unlink(missing_ok=True)
-            except Exception:
-                pass
-            item["path"] = ""
+                result = parser.parse_file(Path(item["path"]), item["filename"])
+            finally:
+                # Keep only structured parse results; never retain the uploaded binary.
+                try:
+                    Path(item["path"]).unlink(missing_ok=True)
+                except Exception:
+                    pass
+                item["path"] = ""
             doc_id = new_id("doc_")
             file_record = {
                 "id": item["file_id"], "supplier_id": supplier_id, "filename": item["filename"],
