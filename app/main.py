@@ -215,6 +215,19 @@ def _public_state(scope: str = "all", supplier_id: str | None = None, full_recor
             analysis_public = analysis
     item_ids = {it.get("id") for it in (analysis_public or {}).get("items") or []}
     records = [r for r in comp.get("records") or [] if r.get("item_id") in item_ids] if comp.get("scope") == effective_scope else []
+    if analysis_public:
+        doc_public = dict(analysis_public.get("doc") or {})
+        if not doc_public.get("coverage"):
+            types = {str(d.get("type") or "unknown") for d in (analysis_public.get("documents") or [])}
+            doc_public["coverage"] = {
+                "packing_list": bool(types & {"packing_list", "combined"}),
+                "invoice": bool(types & {"invoice", "combined"}),
+                "sales_confirmation": "contract" in types,
+                "customs_declaration": "customs_declaration" in types,
+                "declaration_elements": bool(types & {"declaration_elements", "customs_declaration"}),
+            }
+        analysis_public = dict(analysis_public)
+        analysis_public["doc"] = doc_public
     public_comp = {
         "run_at": comp.get("run_at"), "summary": comp.get("summary") or {},
         "records": (([_compact_record(r) for r in records]) if full_records else [_record_stub(r) for r in records]),
