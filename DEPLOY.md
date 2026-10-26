@@ -33,7 +33,18 @@ https://raymondlee145.github.io/supplier-document-workbench/
 
 仓库：<https://github.com/RaymondLEE145/supplier-document-workbench>
 
-Render 一键 Blueprint：
+**已上线完整平台（Render free）**：
+
+```text
+https://supplier-document-workbench.onrender.com
+```
+
+- `/api/health` 返回 200；真实上传 2 份 XLSX 后解析出 15 行，测试数据已清理。
+- 免费实例会在空闲后休眠，首次打开可能需要 30–60 秒唤醒。
+- 免费实例没有持久盘；升级到 starter 并取消 `render.yaml` 里 `disk` 的注释后，`/app/data` 才会持久化。
+- Linux 容器没有 WPS COM，公式缓存值由打开 Excel/WPS 时重算；服务端校验会给出 warning，不阻断导出。
+
+Render 一键 Blueprint（重新部署/新环境时用）：
 
 ```text
 https://render.com/deploy?repo=https://github.com/RaymondLEE145/supplier-document-workbench
@@ -59,7 +70,18 @@ http://127.0.0.1:8000
 
 ---
 
-## 3. Docker
+## 3. 单文件上传规则
+
+- 只上传装箱单：只填「装箱单」，其他四张表保持模板空白；不会生成发票金额、合同金额、报关单、申报要素。
+- 只上传发票：只填「发票」，不生成箱单/合同/报关单。
+- 只上传合同：只填「销售合同」；只上传报关单/申报要素：只填对应表。
+- 装箱单 + 发票：只填这两张，不自动补合同/报关单。
+- 中英文品名、HS、已确认官方溯源可补充；缺失的金额、材质、合同号等保持空白，不默认 `USD/CIF/一般贸易/纸箱包装`。
+- 导出页会显示本次识别到的单证类型，未上传类型置灰。
+
+---
+
+## 4. Docker
 
 ```bash
 docker build -t supplier-workbench .
@@ -72,7 +94,7 @@ docker run -p 8000:8000 -v workbench-data:/app/data supplier-workbench
 
 ---
 
-## 4. GitHub + Render 一键部署
+## 5. GitHub + Render 一键部署
 
 当前环境没有安装 `git`/`gh`，也没有 GitHub Token，因此无法从本机直接 push 到你的 GitHub 账号。仓库已经包含：
 
@@ -110,7 +132,7 @@ git push -u origin main
 
 ---
 
-## 5. 公网安全
+## 6. 公网安全
 
 当前版本是本地单用户工作台，没有登录鉴权。放到公网前建议至少：
 
@@ -121,7 +143,7 @@ git push -u origin main
 
 ---
 
-## 6. 关键数据与缓存
+## 7. 关键数据与缓存
 
 - `data/state.json`：供应商、单证、标准模型、合规确认
 - `data/uploads/`：原始文件
