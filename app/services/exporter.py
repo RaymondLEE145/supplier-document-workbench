@@ -30,7 +30,7 @@ def _city(dest: str) -> str:
     for city in ["MELBOURNE", "SYDNEY", "BRISBANE", "PERTH", "ADELAIDE", "FREMANTLE", "HOBART"]:
         if city in d:
             return city
-    return str(dest or "MELBOURNE").split(",")[0].strip().upper()
+    return str(dest or "").split(",")[0].strip().upper()
 
 
 def _customs_office(loading_port: str) -> str:
@@ -51,30 +51,44 @@ def build_payload(analysis: dict, compliance: dict, *, acknowledge_unsupported: 
     if not items:
         raise ExportBlocked("没有可导出的货物行。", gate)
     doc = dict(analysis.get("doc") or {})
-    doc["destination_country"] = "AUSTRALIA"
-    doc["destination_port"] = _city(doc.get("destination_port") or doc.get("destination") or "MELBOURNE")
+    doc["destination_country"] = doc.get("destination_country") or ""
+    doc["destination_port"] = _city(doc.get("destination_port") or doc.get("destination") or "")
     doc["loading_port"] = str(doc.get("loading_port") or "").split(",")[0].strip()
     doc["customs_office"] = doc.get("customs_office") or _customs_office(doc.get("loading_port", ""))
-    doc["packing"] = doc.get("packing") or "纸箱包装"
-    doc["transport"] = "海运"
-    doc["supervision_mode"] = "一般贸易"
-    doc["tax_mode"] = "一般征税"
-    doc["currency"] = "USD"
-    doc["incoterm"] = doc.get("incoterm") or "CIF"
-    doc["shipping_mark"] = doc.get("shipping_mark") or "N/M"
-    doc["signed_at"] = doc.get("signed_at") or f"{doc.get('loading_port', '')}, CHINA"
+    doc["packing"] = doc.get("packing") or ""
+    doc["transport"] = doc.get("transport") or ""
+    doc["supervision_mode"] = doc.get("supervision_mode") or ""
+    doc["tax_mode"] = doc.get("tax_mode") or ""
+    doc["currency"] = doc.get("currency") or ""
+    doc["incoterm"] = doc.get("incoterm") or ""
+    doc["shipping_mark"] = doc.get("shipping_mark") or ""
+    doc["signed_at"] = doc.get("signed_at") or ""
     doc["seller_name_en"] = doc.get("seller_name_en") or doc.get("seller_name") or doc.get("supplier_name")
     doc["seller_address"] = doc.get("seller_address") or ""
     doc["buyer_address"] = doc.get("buyer_address") or ""
     if not doc.get("remarks"):
-        n = len(doc.get("supplier_names") or [])
-        doc["remarks"] = f"CONSOLIDATED SHIPMENT / {n} SUPPLIERS" if n > 1 else ""
+        doc["remarks"] = ""
+    coverage = doc.get("coverage") or analysis.get("coverage") or {}
+    if not coverage:
+        types = {str(d.get("type") or "unknown") for d in (analysis.get("documents") or [])}
+        coverage = {
+            "packing_list": bool(types & {"packing_list", "combined"}),
+            "invoice": bool(types & {"invoice", "combined"}),
+            "sales_confirmation": "contract" in types,
+            "customs_declaration": "customs_declaration" in types,
+            "declaration_elements": bool(types & {"declaration_elements", "customs_declaration"}),
+        }
+    coverage = {k: bool(coverage.get(k)) for k in ("packing_list", "invoice", "sales_confirmation",
+                                                    "customs_declaration", "declaration_elements")}
+    if not any(coverage.values()):
+        raise ExportBlocked("未识别到装箱单/发票/合同/报关单，无法确定应填写哪张表；请先识别单证类型。", gate)
+    doc["coverage"] = coverage
     for idx, it in enumerate(items, start=1):
         it["no"] = idx
-        it["currency"] = "USD"
-        it["unit"] = "PCS"
-        it["origin"] = it.get("origin") or "中国"
-        it["packing"] = it.get("packing") or doc.get("packing") or "EXPORT CARTON"
+        it["currency"] = it.get("currency") or ""
+        it["unit"] = it.get("unit") or ""
+        it["origin"] = it.get("origin") or ""
+        it["packing"] = it.get("packing") or doc.get("packing") or ""
         pref = it.get("preference_eligible") or ""
         if "CONDITIONAL" in pref.upper():
             it["preference"] = "CONDITIONAL"
@@ -85,7 +99,7 @@ def build_payload(analysis: dict, compliance: dict, *, acknowledge_unsupported: 
             it["preference"] = "MFN"
         else:
             it["preference"] = pref[:40]
-        it["destination_country"] = "AUSTRALIA"
+        it["destination_country"] = it.get("destination_country") or doc.get("destination_country") or ""
     payload = {
         "meta": {
             "generated_at": now_iso(),
@@ -94,6 +108,7 @@ def build_payload(analysis: dict, compliance: dict, *, acknowledge_unsupported: 
             "deduplicated": (analysis.get("totals") or {}).get("duplicates_removed", 0),
             "gate": gate,
         },
+        "coverage": coverage,
         "doc": doc,
         "items": items,
     }
@@ -164,6 +179,7 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
     check("5 个 Sheet 完整", wb.sheetnames == expected_sheets, f"实际: {wb.sheetnames}")
     items = payload.get("items") or []
     doc = payload.get("doc") or {}
+    coverage = payload.get("coverage") or {}
     n = len(items)
 
     def sheet(name: str):
@@ -187,7 +203,7 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
 
     # packed data
     ws = sheet("装箱清单")
-    if ws:
+    if ws and coverage.get("packing_list", True):
         bad = []
         for idx, it in enumerate(items):
             r = 6 + idx
@@ -217,7 +233,7 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
 
     # invoice
     ws = sheet("发票")
-    if ws:
+    if ws and coverage.get("invoice", True):
         bad = []
         for idx, it in enumerate(items):
             r = 10 + idx
@@ -233,7 +249,7 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
 
     # declaration elements
     ws = sheet("申报要素")
-    if ws:
+    if ws and coverage.get("declaration_elements", True):
         bad = []
         for idx, it in enumerate(items):
             r = 5 + idx
@@ -245,7 +261,7 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
 
     # sales confirmation
     ws = sheet("销货确认书")
-    if ws:
+    if ws and coverage.get("sales_confirmation", True):
         bad = []
         for idx, it in enumerate(items):
             r = 21 + idx
@@ -267,7 +283,7 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
 
     # customs declaration
     ws = sheet("报关单 ")
-    if ws:
+    if ws and coverage.get("customs_declaration", True):
         bad = []
         for idx, it in enumerate(items):
             r = 20 + idx * 2
@@ -281,8 +297,8 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
                 bad.append(f"D{r}")
         check("报关单 商品项（HS/数量单位/跨表公式）", not bad, ("错位: " + ", ".join(bad[:12])) if bad else f"{n} 个商品项")
         check("报关单 合同号", str(ws["A12"].value or "") == str(doc.get("contract_no") or ""), str(ws["A12"].value or ""))
-        check("报关单 贸易国/运抵国", str(ws["H12"].value or "") == "澳大利亚", str(ws["H12"].value or ""))
-        check("报关单 成交方式", str(ws["J14"].value or "") == str(doc.get("incoterm") or "CIF"), str(ws["J14"].value or ""))
+        check("报关单 贸易国/运抵国", str(ws["H12"].value or "") == str(doc.get("destination_country") or ""), str(ws["H12"].value or ""))
+        check("报关单 成交方式", str(ws["J14"].value or "") == str(doc.get("incoterm") or ""), str(ws["J14"].value or ""))
         check("报关单 页码占位已替换", "(XX海关)" != str(ws["H4"].value or "") or not doc.get("customs_office"), str(ws["H4"].value or ""), severity="warning")
 
     # formulas / errors
@@ -313,7 +329,8 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
         "warnings": len(warnings),
         "sheet_names": wb.sheetnames,
         "styles_preserved": not style_diffs,
-        "formula_cached_available": wbv["发票"][f"J{10 + n}"].value is not None if n else False,
+        "formula_cached_available": (wbv["发票"][f"J{10 + n}"].value is not None
+                                     if coverage.get("invoice", True) and n else False),
     }
     return report
 
@@ -361,6 +378,7 @@ def export(analysis: dict, compliance: dict, template_path: Path, state_settings
         "created_at": now_iso(),
         "duration_ms": int((time.time() - t0) * 1000),
         "gate": gate,
+        "coverage": payload.get("coverage") or {},
         "validation": validation,
         "recalc": recalc,
         "engine": engine,
