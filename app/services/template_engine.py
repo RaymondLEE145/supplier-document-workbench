@@ -456,7 +456,7 @@ def _write_data_rows(ws, spec: dict, items: list[dict], snap: dict) -> dict:
                     val = _text(item.get("name_en") or item.get("name_zh"))
                 elif field == "name_zh":
                     val = _text(item.get("name_zh") or item.get("name_en"))
-                elif field in {"brand", "material", "usage", "processing", "scenario"} and decl.get(field):
+                elif field in {"brand", "model", "material", "usage", "processing", "scenario"} and decl.get(field):
                     val = _text(decl.get(field))
                 elif field == "preference" and decl.get("preference"):
                     val = _text(decl.get("preference"))
