@@ -186,14 +186,14 @@ def aggregate(documents: list[dict], suppliers: list[dict]) -> dict:
     for idx, it in enumerate(aggregated, start=1):
         it["id"] = f"it_{idx:03d}"
         it["no"] = idx
-        it["currency"] = it.get("currency") or "USD"
-        it["origin"] = it.get("origin") or "中国"
-        it["destination_country"] = it.get("destination_country") or "AUSTRALIA"
+        it["currency"] = it.get("currency") or ""
+        it["origin"] = it.get("origin") or ""
+        it["destination_country"] = it.get("destination_country") or ""
         it["origin_criterion"] = it.get("origin_criterion") or ""
         it["preference_eligible"] = it.get("preference_eligible") or ""
         it.setdefault("supplements", {})
         if not it.get("destination_port"):
-            it["destination_port"] = "MELBOURNE"
+            it["destination_port"] = ""
         if not it.get("source_province"):
             joined = (str(it.get("supplier_name") or "") + " " + str(it.get("source_file") or "")).lower()
             if "ningbo" in joined or "宁波" in joined:
@@ -272,23 +272,23 @@ def aggregate(documents: list[dict], suppliers: list[dict]) -> dict:
         "invoice_no": first("invoice_no"),
         "contract_no": first("contract_no"),
         "date": date or first("date"),
-        "currency": first("currency") or "USD",
-        "incoterm": first("incoterm") or "CIF",
+        "currency": first("currency") or "",
+        "incoterm": first("incoterm") or "",
         "destination": first("destination"),
-        "destination_country": "AUSTRALIA",
-        "destination_port": first("destination_port") or first("destination") or "MELBOURNE",
+        "destination_country": first("destination_country") or "",
+        "destination_port": first("destination_port") or first("destination") or "",
         "loading_port": loading_port,
         "customs_office": customs_office,
         "vessel": first("vessel"),
         "bl_no": first("bl_no"),
         "container_no": ", ".join(dict.fromkeys([str((d.get("fields") or {}).get("container_no")) for d in docs if (d.get("fields") or {}).get("container_no")])),
-        "packing": first("packing") or "纸箱包装",
-        "signed_at": first("signed_at") or (loading_port if "CHINA" in loading_port.upper() else (f"{loading_port}, CHINA" if loading_port else "")),
-        "shipping_mark": "N/M",
-        "remarks": (f"CONSOLIDATED SHIPMENT / {len(supplier_names)} SUPPLIERS / {len(docs)} DOCS" if multi else (first("remarks") or "")),
-        "transport": "海运",
-        "supervision_mode": "一般贸易",
-        "tax_mode": "一般征税",
+        "packing": first("packing") or "",
+        "signed_at": first("signed_at") or "",
+        "shipping_mark": first("shipping_mark") or "",
+        "remarks": first("remarks") or "",
+        "transport": first("transport") or "",
+        "supervision_mode": first("supervision_mode") or "",
+        "tax_mode": first("tax_mode") or "",
         "pre_entry_no": "",
         "customs_no": "",
         "license_no": "",
@@ -299,12 +299,23 @@ def aggregate(documents: list[dict], suppliers: list[dict]) -> dict:
         "total_net": totals["net_weight"],
         "total_cbm": totals["cbm"],
     }
-    doc["invoice_no"] = doc["invoice_no"] or (f"{doc['contract_no']}-INV" if doc["contract_no"] else "")
+    # Do not derive an invoice number from a contract number; leave missing blank.
     if not doc["seller_address"]:
         # parser may expose the address under "address" on any doc
         doc["seller_address"] = next((str((d.get("fields") or {}).get("address")) for d in docs if (d.get("fields") or {}).get("address")), "")
     if not doc["buyer_address"]:
         doc["buyer_address"] = next((str((d.get("fields") or {}).get("buyer_address")) for d in docs if (d.get("fields") or {}).get("buyer_address")), "")
+
+    source_types = sorted({str(d.get("type") or "unknown") for d in docs})
+    coverage = {
+        "packing_list": any(t in {"packing_list", "combined"} for t in source_types),
+        "invoice": any(t in {"invoice", "combined"} for t in source_types),
+        "sales_confirmation": "contract" in source_types,
+        "customs_declaration": "customs_declaration" in source_types,
+        "declaration_elements": any(t in {"declaration_elements", "customs_declaration"} for t in source_types),
+    }
+    doc["source_types"] = source_types
+    doc["coverage"] = coverage
 
     files = []
     for d in docs:
@@ -319,6 +330,8 @@ def aggregate(documents: list[dict], suppliers: list[dict]) -> dict:
         "totals": totals,
         "conflicts": conflicts,
         "documents": files,
+        "coverage": coverage,
+        "source_types": source_types,
         "supplier_names": supplier_names,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
     }
