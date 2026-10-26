@@ -450,11 +450,16 @@ def _write_data_rows(ws, spec: dict, items: list[dict], snap: dict) -> dict:
             ws.row_dimensions[dst].height = h
         if block == 1:
             values: dict[int, Any] = {}
+            decl = item.get("declaration_fields") or {}
             for field, col in cols.items():
                 if field == "name_en":
                     val = _text(item.get("name_en") or item.get("name_zh"))
                 elif field == "name_zh":
                     val = _text(item.get("name_zh") or item.get("name_en"))
+                elif field in {"brand", "material", "usage", "processing", "scenario"} and decl.get(field):
+                    val = _text(decl.get(field))
+                elif field == "preference" and decl.get("preference"):
+                    val = _text(decl.get("preference"))
                 elif field in {"cartons", "pieces_per_carton", "pieces"}:
                     v = item.get(field)
                     val = "" if v in (None, "") or float(v or 0) == 0 else int(v)
@@ -498,7 +503,7 @@ def _write_data_rows(ws, spec: dict, items: list[dict], snap: dict) -> dict:
             name = _text(item.get("name_zh") or item.get("name_en"))
             spec_text = _text(item.get("model") or "")
             name_spec = f"{name} / {spec_text}" if name and spec_text else (name or spec_text)
-            unit = _text(item.get("unit") or "")
+            unit = _text(item.get("unit") or "PCS")
             qty = item.get("pieces")
             qty = int(qty) if qty not in (None, "") and int(qty or 0) != 0 else ""
             up = item.get("unit_price")
@@ -506,7 +511,7 @@ def _write_data_rows(ws, spec: dict, items: list[dict], snap: dict) -> dict:
             amt = item.get("amount")
             amount = round(_num(amt), 2) if amt not in (None, "") and float(amt or 0) != 0 else ""
             currency = _text(item.get("currency") or "")
-            origin = _text(item.get("origin") or "")
+            origin = _text(item.get("origin") or "中国")
             dest = _text(item.get("destination_country") or "")
             amount_text = f"{amount} {currency}".strip() if amount != "" else ""
             source = _text(item.get("source_province") or item.get("domestic_source") or "")
