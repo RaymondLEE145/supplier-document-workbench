@@ -20,6 +20,7 @@ from .config import (ALLOWED_EXTENSIONS, ASSETS_DIR, DATA_DIR, DEFAULT_TEMPLATE,
                      OUTPUT_DIR, SCRIPT_DIR, STATIC_DIR, TEMPLATE_DIR, UPLOAD_DIR, load_settings,
                      new_id, now_iso, safe_filename, save_settings)
 from .services import codegen, compliance as compliance_service, exporter, parser, template_engine
+from .services import backup as backup_service
 from .services import jobs as job_service
 from .services.merge import aggregate
 from .store import (file_sha256, find_supplier, inspect_template, load_state, log_activity, mutate,
@@ -226,6 +227,10 @@ def _public_state(scope: str = "all", supplier_id: str | None = None, full_recor
                 "customs_declaration": bool(analysis_public.get("items") or []),
                 "declaration_elements": bool(analysis_public.get("items") or []),
             }
+        if effective_scope == "all":
+            doc_public["coverage"] = dict(doc_public["coverage"])
+            doc_public["coverage"]["customs_declaration"] = False
+            doc_public["coverage"]["declaration_elements"] = False
         analysis_public = dict(analysis_public)
         analysis_public["doc"] = doc_public
     public_comp = {
@@ -419,7 +424,8 @@ def backup_supplier(supplier_id: str) -> FileResponse:
     docs = supplier_documents(state, supplier_id)
     analysis = (state.get("analyses") or {}).get("by_supplier", {}).get(supplier_id)
     backup = {"version": 1, "created_at": now_iso(), "supplier": s,
-              "files": [{k: f.get(k) for k in ("id", "filename", "hash", "size", "ext", "status", "uploaded_at")} for f in files],
+              "backup_dir": str(backup_service.BACKUP_ROOT / supplier_id),
+              "files": [{k: f.get(k) for k in ("id", "filename", "hash", "size", "ext", "status", "uploaded_at", "backup_path")} for f in files],
               "documents": [{k: d.get(k) for k in ("id", "filename", "type", "fields", "items", "warnings")} for d in docs],
               "analysis": analysis}
     path = DATA_DIR / f"backup_{safe_filename(s['name'])}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
@@ -529,8 +535,9 @@ async def upload(supplier_id: str = Form(...), files: list[UploadFile] = File(..
         stored = UPLOAD_DIR / f"{file_id}_{filename}"
         stored.write_bytes(raw)
         digest = file_sha256(stored)
+        backup_path = backup_service.backup_upload(supplier_id, stored, filename, digest, len(raw))
         saved.append({"ok": True, "file_id": file_id, "filename": filename, "stored_name": stored.name,
-                      "path": str(stored), "hash": digest, "size": len(raw), "ext": ext})
+                      "path": str(stored), "backup_path": backup_path, "hash": digest, "size": len(raw), "ext": ext})
     job = job_service.create("upload", {"supplier_id": supplier_id, "files": [s.get("filename") for s in saved]})
 
     def _work(job_id: str):
@@ -552,6 +559,7 @@ async def upload(supplier_id: str = Form(...), files: list[UploadFile] = File(..
                     state.setdefault("files", []).append({
                         "id": item["file_id"], "supplier_id": supplier_id, "filename": item["filename"],
                         "stored_name": item["stored_name"], "path": item["path"], "hash": item["hash"],
+                        "backup_path": item.get("backup_path"),
                         "size": item["size"], "ext": item["ext"], "status": "duplicate", "uploaded_at": now_iso(),
                         "error": f"与已有文件重复（{dup.get('filename')}）", "document_id": None,
                     })
@@ -565,6 +573,7 @@ async def upload(supplier_id: str = Form(...), files: list[UploadFile] = File(..
             file_record = {
                 "id": item["file_id"], "supplier_id": supplier_id, "filename": item["filename"],
                 "stored_name": item["stored_name"], "path": item["path"], "hash": item["hash"],
+                "backup_path": item.get("backup_path"),
                 "size": item["size"], "ext": item["ext"], "uploaded_at": now_iso(),
                 "status": "parsed" if result.get("ok") else "failed",
                 "document_id": doc_id if result.get("ok") else None,
