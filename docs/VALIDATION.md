@@ -114,7 +114,9 @@
 - 导出页新增“本次可填写的单证”卡片，报关单/申报要素标注“自动生成”。
 - 截图：[ui_coverage_packing_only.png](ui_coverage_packing_only.png)
 
-**Render 线上实测（2026-10-26）**：上传仅装箱单 → coverage 只有 `packing_list=true`，导出 **8/8 通过**；发票 `J10`、合同 `H21`、报关单 `B20`、申报要素 `C5` 全部为空；[live_packing_only.xlsx](live_packing_only.xlsx)。
+**Render 线上实测（2026-10-26）**：上传仅装箱单 → coverage 只有 `packing_list + customs_declaration + declaration_elements`，导出 **14/14 通过**；报关单商品项有 HS/品名/数量/单位/原产地/目的国；申报要素有品牌/材质/用途/工艺/场景/优惠；发票 `J10`、合同 `H21` 仍为空；[live_decl.xlsx](live_decl.xlsx)。
+
+官方申报要素缓存：`assets/customs_elements.json`，当前覆盖 23 个 HS（4,178 条），来源 `online.customs.gov.cn/ociswebserver/pages/cus/#/tgcs/info?paramCode=CusMerchElement`。
 
 ### 4.5 官方数据源
 
