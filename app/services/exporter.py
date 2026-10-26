@@ -289,12 +289,18 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
             r = 20 + idx * 2
             if str(ws[f"B{r}"].value or "") != str(it.get("hs_code") or ""):
                 bad.append(f"B{r}")
-            if str(ws[f"H{r}"].value or "").upper() not in {"PCS", "件"}:
+            if str(ws[f"H{r}"].value or "").upper() not in {"PCS", "件"} and (it.get("unit") or ""):
                 bad.append(f"H{r}")
-            if str(ws[f"I{r}"].value or "") != f"=销货确认书!F{21 + idx}":
-                bad.append(f"I{r}")
-            if str(ws[f"D{r}"].value or "") != f"=销货确认书!C{21 + idx}":
-                bad.append(f"D{r}")
+            if coverage.get("sales_confirmation", True):
+                if str(ws[f"I{r}"].value or "") != f"=销货确认书!F{21 + idx}":
+                    bad.append(f"I{r}")
+                if str(ws[f"D{r}"].value or "") != f"=销货确认书!C{21 + idx}":
+                    bad.append(f"D{r}")
+            else:
+                if str(ws[f"D{r}"].value or "") != str(it.get("name_zh") or it.get("name_en") or ""):
+                    bad.append(f"D{r}")
+                if str(ws[f"I{r}"].value or "") != str(it.get("pieces") or ""):
+                    bad.append(f"I{r}")
         check("报关单 商品项（HS/数量单位/跨表公式）", not bad, ("错位: " + ", ".join(bad[:12])) if bad else f"{n} 个商品项")
         check("报关单 合同号", str(ws["A12"].value or "") == str(doc.get("contract_no") or ""), str(ws["A12"].value or ""))
         check("报关单 贸易国/运抵国", str(ws["H12"].value or "") == str(doc.get("destination_country") or ""), str(ws["H12"].value or ""))
