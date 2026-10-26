@@ -80,6 +80,11 @@ def build_payload(analysis: dict, compliance: dict, *, acknowledge_unsupported: 
         }
     coverage = {k: bool(coverage.get(k)) for k in ("packing_list", "invoice", "sales_confirmation",
                                                     "customs_declaration", "declaration_elements")}
+    # "集货汇总" merges packing/invoice/contract only; customs declaration and
+    # declaration elements remain per-supplier and must not be combined.
+    if doc.get("scope") == "all":
+        coverage["customs_declaration"] = False
+        coverage["declaration_elements"] = False
     if not any(coverage.values()):
         raise ExportBlocked("未识别到装箱单/发票/合同/报关单，无法确定应填写哪张表；请先识别单证类型。", gate)
     doc["coverage"] = coverage
