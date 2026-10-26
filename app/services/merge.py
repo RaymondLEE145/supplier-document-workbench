@@ -311,8 +311,8 @@ def aggregate(documents: list[dict], suppliers: list[dict]) -> dict:
         "packing_list": any(t in {"packing_list", "combined"} for t in source_types),
         "invoice": any(t in {"invoice", "combined"} for t in source_types),
         "sales_confirmation": "contract" in source_types,
-        "customs_declaration": "customs_declaration" in source_types,
-        "declaration_elements": any(t in {"declaration_elements", "customs_declaration"} for t in source_types),
+        "customs_declaration": bool(aggregated),
+        "declaration_elements": bool(aggregated),
     }
     doc["source_types"] = source_types
     doc["coverage"] = coverage
