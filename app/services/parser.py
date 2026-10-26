@@ -427,6 +427,15 @@ def infer_type(text: str) -> str:
     t = _norm(text)
     packing = any(k in t for k in ["packing", "装箱", "packing list", "carton", "毛重"])
     invoice = any(k in t for k in ["invoice", "发票", "unit price", "amount", "金额"])
+    declaration_elements = any(k in t for k in ["申报要素", "declaration elements", "declaration element"])
+    customs = any(k in t for k in ["报关单", "customs declaration", "中华人民共和国海关", "海关出口货物报关单"])
+    contract = any(k in t for k in ["sales contract", "sales confirmation", "销售合同", "售货确认书", "合同"])
+    if declaration_elements and not packing and not invoice:
+        return "declaration_elements"
+    if customs and not packing and not invoice:
+        return "customs_declaration"
+    if contract and not invoice and not packing:
+        return "contract"
     if packing and invoice:
         return "combined"
     if invoice:
@@ -1024,6 +1033,8 @@ def assemble_document(sections: list[dict], fields: dict, filename: str, fmt: st
                 invoice_items.append(it)
             if st == "unknown":
                 other_items.append(it)
+            elif st in {"contract", "customs_declaration", "declaration_elements"}:
+                other_items.append(it)
     # exact duplicate removal within each bucket
     packing_items = dedupe_items(packing_items)
     invoice_items = dedupe_items(invoice_items)
@@ -1108,7 +1119,21 @@ def assemble_document(sections: list[dict], fields: dict, filename: str, fmt: st
                 it["hs_code"] = hs_by_name[name]
                 it["hs_inferred_from_sibling"] = True
 
-    doc_type = "combined" if (packing_items and invoice_items) else (packing_items and "packing_list") or (invoice_items and "invoice") or "unknown"
+    section_types = {sec.get("doc_type") or "unknown" for sec in sections}
+    if packing_items and invoice_items:
+        doc_type = "combined"
+    elif "contract" in section_types:
+        doc_type = "contract"
+    elif "customs_declaration" in section_types:
+        doc_type = "customs_declaration"
+    elif "declaration_elements" in section_types:
+        doc_type = "declaration_elements"
+    elif packing_items:
+        doc_type = "packing_list"
+    elif invoice_items:
+        doc_type = "invoice"
+    else:
+        doc_type = "unknown"
     totals = {
         "cartons": sum(it["cartons"] for it in final),
         "pieces": sum(it["pieces"] for it in final),
