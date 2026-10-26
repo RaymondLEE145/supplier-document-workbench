@@ -22,7 +22,7 @@
         </div>
       </div>
       <nav class="topnav" aria-label="主导航">
-        <button class="nav-pill" :class="{ active: scope === 'supplier' }" @click="scopeSupplier">供应商独立存档</button>
+        <button class="nav-pill" :class="{ active: scope === 'supplier' }" @click="scopeSupplier">供应商独立处理</button>
         <button class="nav-pill" @click="goUpload">按单据出模板</button>
         <button class="nav-pill" :class="{ active: scope === 'all' }" @click="scopeAll">集货汇总</button>
         <span class="nav-divider"></span>
@@ -62,15 +62,13 @@
         <div>
           <p class="eyebrow">SUPPLIERS</p>
           <h2 class="panel-title">供应商工作台</h2>
-          <p class="panel-sub">每个供应商独立上传、独立存档；按单据出模板，或把多供应商集货合并成一份可交付的出口单证。</p>
+          <p class="panel-sub">每个供应商独立处理；按单据出模板，或把多供应商集货合并成一份可交付的出口单证。</p>
         </div>
         <div class="supplier-actions">
           <button class="btn btn-ghost navy" @click="goUpload">单据流程</button>
           <button class="btn btn-ghost" @click="scopeAll">集货汇总</button>
           <button class="btn btn-gold" @click="openNewSupplier">＋ 新建供应商</button>
-          <button class="link-btn" @click="$refs.backupInput.click()">导入备份</button>
           <button class="link-btn" @click="openSettings">设置</button>
-          <input ref="backupInput" type="file" accept="application/json,.json" hidden @change="importBackup" />
         </div>
       </div>
 
@@ -83,7 +81,7 @@
                 <h3>{{ s.name }}</h3>
                 <span class="supplier-badge">{{ s.files }} FILES</span>
               </div>
-              <p class="supplier-sub">独立存档 · {{ s.documents }} 份有效单证</p>
+              <p class="supplier-sub">独立处理 · {{ s.documents }} 份有效单证</p>
             </div>
             <span v-if="scope === 'supplier' && supplierId === s.id" class="active-pin">ACTIVE</span>
           </div>
@@ -98,7 +96,6 @@
             </span>
             <div class="supplier-tools" @click.stop>
               <button class="icon-link" title="重命名" @click="openRename(s)">重命名</button>
-              <button class="icon-link" title="备份" @click="downloadBackup(s)">备份</button>
               <button class="icon-link danger" title="删除" @click="removeSupplier(s)">删除</button>
             </div>
           </div>
@@ -107,7 +104,7 @@
         <button class="supplier-new" @click="openNewSupplier">
           <span class="new-plus">＋</span>
           <strong>新建供应商</strong>
-          <em>独立上传 · 独立存档</em>
+          <em>独立上传 · 独立处理</em>
         </button>
       </div>
       <div v-if="!suppliers.length" class="empty-hint">还没有供应商。先新建一个供应商，再上传装箱单与发票。</div>
@@ -125,6 +122,10 @@
           <span class="context-label">CURRENT WORKSET</span>
           <strong>{{ scope === 'all' ? '集货汇总 · 全部供应商' : (activeSupplier ? activeSupplier.name : '请选择供应商') }}</strong>
           <span class="context-meta">{{ analysisItems.length }} 行货物 · {{ number(totals.cartons || 0) }} 箱</span>
+          <div v-if="step === 4" class="scope-switch">
+            <button :class="{ active: scope === 'supplier' }" @click="scopeSupplier">当前供应商</button>
+            <button :class="{ active: scope === 'all' }" @click="scopeAll">集货汇总</button>
+          </div>
         </div>
       </div>
 
@@ -153,6 +154,7 @@
               </div>
               <input ref="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.bmp,.xlsx,.xlsm,.xls" hidden @change="onFileInput" />
             </div>
+            <p class="subtle" style="margin: 8px 0 0;">新上传会替换该供应商之前的全部单证数据；工作台只保留解析后的结构化结果，不保留上传文件副本。</p>
 
             <div v-if="uploadJob" class="job-card" :class="uploadJob.status">
               <div class="job-head">
@@ -442,7 +444,7 @@
                 <div class="export-actions">
                   <button class="btn btn-navy big" :disabled="exportBusy || !analysisItems.length || (!gate.ok && !gate.needs_run && (gate.unconfirmed || []).length)" @click="startExport">
                     <span v-if="exportBusy" class="spinner"></span>
-                    {{ exportBusy ? '正在生成并校验…' : '汇总导出 Excel →' }}
+                    {{ exportBusy ? '正在生成并校验…' : (scope === 'all' ? '集货汇总导出 Excel →' : '当前供应商导出 Excel →') }}
                   </button>
                   <button class="btn btn-ghost" @click="step = 3">← 返回校对</button>
                 </div>
@@ -525,7 +527,7 @@
   <div v-if="modal.supplier" class="modal-mask" @click.self="modal.supplier=false">
     <div class="modal small-modal">
       <div class="modal-head"><div><p class="eyebrow">NEW SUPPLIER</p><h3>新建供应商</h3></div><button class="modal-x" @click="modal.supplier=false">×</button></div>
-      <p class="modal-sub">每个供应商独立存档；同一供应商的装箱单与发票会自动配对合并。</p>
+      <p class="modal-sub">每个供应商独立处理；同一供应商的装箱单与发票会自动配对合并。新上传会替换该供应商之前的单证数据，不保留上传文件备份。</p>
       <label class="field-label">供应商名称</label>
       <input class="text-input" v-model="newSupplierName" placeholder="例如：宁波鸿林家居有限公司" @keyup.enter="createSupplier" />
       <div class="modal-actions"><button class="btn btn-ghost" @click="modal.supplier=false">取消</button><button class="btn btn-gold" @click="createSupplier">创建供应商</button></div>
@@ -645,7 +647,6 @@
         <h4>模板与数据</h4>
         <div class="settings-actions">
           <button class="btn btn-ghost navy small" @click="$refs.templateInput.click()">替换 Excel 模板</button>
-          <button class="btn btn-ghost small" @click="$refs.backupInput.click()">导入供应商备份</button>
           <button class="btn btn-ghost small" @click="demoLoad">载入演示单证</button>
         </div>
         <p class="subtle">模板必须包含：装箱清单 / 发票 / 申报要素 / 销货确认书 / 报关单。</p>
