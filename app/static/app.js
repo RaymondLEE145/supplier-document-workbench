@@ -99,6 +99,13 @@ createApp({
         ok: false, needs_run: true, unconfirmed: [], missing_hs: [], supported: 0, confirmed: 0, unsupported: 0,
       };
     },
+    coverage() {
+      return (this.analysis && this.analysis.doc && this.analysis.doc.coverage) || {};
+    },
+    missingSheetLabels() {
+      const labels = { packing_list: "装箱单", invoice: "发票", sales_confirmation: "销售合同", customs_declaration: "报关单", declaration_elements: "申报要素" };
+      return Object.entries(labels).filter(([k]) => !this.coverage[k]).map(([, v]) => v);
+    },
     mappingSheets() {
       if (!this.mapping || !this.mapping.sheets) return [];
       return this.mapping.sheets.filter((s) => s.role && s.role !== "unmapped");
