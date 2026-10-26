@@ -416,10 +416,10 @@
                 <div class="coverage-card">
                   <div class="coverage-head"><strong>本次可填写的单证</strong><span>只填已上传类型</span></div>
                   <div class="coverage-chips">
-                    <span v-for="(label,key) in {packing_list:'装箱单',invoice:'发票',sales_confirmation:'销售合同',customs_declaration:'报关单',declaration_elements:'申报要素'}" :key="key" class="chip" :class="coverage[key] ? 'ok' : 'grey'">{{ label }} · {{ coverage[key] ? '已识别' : '未上传' }}</span>
+                    <span v-for="(label,key) in {packing_list:'装箱单',invoice:'发票',sales_confirmation:'销售合同',customs_declaration:'报关单',declaration_elements:'申报要素'}" :key="key" class="chip" :class="coverage[key] ? 'ok' : 'grey'">{{ label }} · {{ coverage[key] ? ((key==='customs_declaration'||key==='declaration_elements') ? '自动生成' : '已识别') : '未上传' }}</span>
                   </div>
-                  <p v-if="missingSheetLabels.length" class="coverage-tip">未检测到：{{ missingSheetLabels.join('、') }}。对应表会保持模板空白，不会补造金额、材质、合同号或其他单证信息。</p>
-                  <p v-else class="coverage-tip">只对已识别的单证表填入对应字段；缺失字段保持空白。</p>
+                  <p v-if="missingSheetLabels.length" class="coverage-tip">未上传：{{ missingSheetLabels.join('、') }}，对应表保持空白；报关单/申报要素按 HS 自动生成，不补造发票/合同金额。</p>
+                  <p v-else class="coverage-tip">报关单/申报要素按 HS 自动生成；发票/合同字段只使用已上传单证的值，缺失保持空白。</p>
                 </div>
                 <div v-if="(gate.unconfirmed || []).length" class="alert alert-warn compact">
                   有 {{ gate.unconfirmed.length }} 条补充数据尚未确认，导出已阻断。请打开溯源卡片逐条确认。
