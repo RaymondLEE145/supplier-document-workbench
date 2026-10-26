@@ -123,8 +123,8 @@
           <strong>{{ scope === 'all' ? '集货汇总 · 全部供应商' : (activeSupplier ? activeSupplier.name : '请选择供应商') }}</strong>
           <span class="context-meta">{{ analysisItems.length }} 行货物 · {{ number(totals.cartons || 0) }} 箱</span>
           <div v-if="step === 4" class="scope-switch">
-            <button :class="{ active: scope === 'supplier' }" @click="scopeSupplier">当前供应商</button>
-            <button :class="{ active: scope === 'all' }" @click="scopeAll">集货汇总</button>
+            <button :class="{ active: scope === 'supplier' }" @click="exportScopeSupplier">当前供应商</button>
+            <button :class="{ active: scope === 'all' }" @click="exportScopeAll">集货汇总</button>
           </div>
         </div>
       </div>
