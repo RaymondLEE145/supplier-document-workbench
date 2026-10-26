@@ -1175,11 +1175,12 @@ def assemble_document(sections: list[dict], fields: dict, filename: str, fmt: st
 # ---------------------------------------------------------------------------
 def _grid_from_sheet(ws, max_rows: int = 240, max_cols: int = 40) -> list[list[Any]]:
     merged_value: dict[tuple[int, int], Any] = {}
-    for rng in ws.merged_cells.ranges:
-        v = ws.cell(rng.min_row, rng.min_col).value
-        for r in range(rng.min_row, min(rng.max_row, max_rows) + 1):
-            for c in range(rng.min_col, min(rng.max_col, max_cols) + 1):
-                merged_value[(r, c)] = v
+    if hasattr(ws, "merged_cells"):
+        for rng in ws.merged_cells.ranges:
+            v = ws.cell(rng.min_row, rng.min_col).value
+            for r in range(rng.min_row, min(rng.max_row, max_rows) + 1):
+                for c in range(rng.min_col, min(rng.max_col, max_cols) + 1):
+                    merged_value[(r, c)] = v
     rows = min(ws.max_row or 1, max_rows)
     cols = min(ws.max_column or 1, max_cols)
     grid = []
@@ -1206,14 +1207,21 @@ def _grid_from_sheet(ws, max_rows: int = 240, max_cols: int = 40) -> list[list[A
 def parse_excel(path: Path, filename: str) -> dict:
     from openpyxl import load_workbook
 
-    wb = load_workbook(filename=str(path), data_only=True, read_only=False)
-    wb_formula = load_workbook(filename=str(path), data_only=False, read_only=False)
+    # Large packing lists often embed dozens of photos. read_only skips drawing
+    # objects and loading a second workbook, keeping Render within memory limits.
+    large = path.stat().st_size > 12 * 1024 * 1024
+    if large:
+        wb = load_workbook(filename=str(path), data_only=True, read_only=True)
+        wb_formula = None
+    else:
+        wb = load_workbook(filename=str(path), data_only=True, read_only=False)
+        wb_formula = load_workbook(filename=str(path), data_only=False, read_only=False)
     sections = []
     sheets_meta = []
     warnings = []
     all_grid_text: list[str] = []
     for ws in wb.worksheets:
-        ws_f = wb_formula[ws.title]
+        ws_f = wb_formula[ws.title] if wb_formula is not None else None
         grid = _grid_from_sheet(ws)
         if not grid:
             continue
@@ -1224,24 +1232,27 @@ def parse_excel(path: Path, filename: str) -> dict:
         if sheet_type == "unknown":
             sheet_type = infer_type(grid_text[:1500])
         res = analyze_table(grid, {"filename": filename, "page": ws.title, "sheet": ws.title}, sheet_type if sheet_type != "unknown" else None)
+        formula_cells = []
+        if ws_f is not None:
+            formula_cells = [
+                {"coord": c.coordinate, "formula": c.value}
+                for row in ws_f.iter_rows(min_row=1, max_row=min(ws_f.max_row or 1, 80), max_col=min(ws_f.max_column or 1, 24))
+                for c in row
+                if isinstance(c.value, str) and c.value.startswith("=")
+            ][:40]
         sheets_meta.append({
             "title": ws.title,
-            "dim": ws.calculate_dimension(),
+            "dim": ws.calculate_dimension() if hasattr(ws, "calculate_dimension") else "",
             "max_row": ws.max_row,
             "max_col": ws.max_column,
-            "merges": [str(r) for r in ws.merged_cells.ranges],
+            "merges": [str(r) for r in ws.merged_cells.ranges] if hasattr(ws, "merged_cells") else [],
             "header_row": res.get("header_row"),
             "headers": res.get("headers", []),
             "recognized": bool(res.get("ok")),
             "reason": res.get("reason"),
             "item_count": len(res.get("items") or []),
             "grid_preview": [[_cell_preview(c) for c in row[:12]] for row in grid[:12]],
-            "formula_cells": [
-                {"coord": c.coordinate, "formula": c.value}
-                for row in ws_f.iter_rows(min_row=1, max_row=min(ws_f.max_row or 1, 80), max_col=min(ws_f.max_column or 1, 24))
-                for c in row
-                if isinstance(c.value, str) and c.value.startswith("=")
-            ][:40],
+            "formula_cells": formula_cells,
         })
         if res.get("ok"):
             fields = extract_fields_from_grid(grid)
