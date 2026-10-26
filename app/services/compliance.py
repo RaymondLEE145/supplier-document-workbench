@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from ..config import DATA_DIR, RESEARCH_DIR, now_iso
-from . import au_tariff
+from . import au_tariff, declaration
 
 CUSTOMS_QUERY_URL = "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryImpTariffRate"
 CUSTOMS_AGREEMENT_URL = "https://online.customs.gov.cn/ociswebserver/ocis/taxRateQuery/query/queryAgreementRate"
@@ -607,13 +607,28 @@ def _au_first_records(item: dict, idx: int, abf_evidence: dict) -> list[dict]:
         # keep the ABF guidance cards when no AU row exists
         records.extend(_abf_records(item, idx, abf_evidence))
 
-    records.append(_evidence_record(
-        item, f"cmp_{item.get('id')}_decl", "declaration_elements", "", "unsupported",
-        source_url="https://online.customs.gov.cn/ociswebserver/pages/cus/#/tgcs/index",
-        evidence="通关参数接口返回客户端加密载荷，页面未渲染可抓取的申报要素表。",
-        reason="已尝试 online.customs.gov.cn 通关参数（申报要素）入口；数据被客户端加密，无法取得官方要素表，字段保持 unsupported 并置灰。",
-        confidence="unsupported", caveat="未生成任何申报要素，避免编造。",
-    ))
+    decl_hs = str(china.get("codeTs")) if china else (source_hs or au_hs)
+    el = declaration.elements_for(decl_hs)
+    if el.get("element_text"):
+        records.append(_evidence_record(
+            item, f"cmp_{item.get('id')}_decl", "declaration_elements", el["element_text"], "supported",
+            source_url=el.get("source_url") or declaration.SOURCE_URL,
+            evidence=json.dumps({"hs": el.get("hs"), "elements": el.get("elements"),
+                                 "required": el.get("required")}, ensure_ascii=False),
+            reason=(f"中国海关官方申报要素表（CusMerchElement）按 {decl_hs} 匹配到 "
+                    f"{el.get('hs')} 组：{el.get('element_text')}。导出时只填已知产品值；"
+                    "官方要素只规定必填项，不提供产品材质/用途等具体值，缺失值不编造。"),
+            confidence="official CusMerchElement",
+            caveat="申报要素以实际通关时海关解释为准；产品值需与发票/箱单/合同一致。",
+        ))
+    else:
+        records.append(_evidence_record(
+            item, f"cmp_{item.get('id')}_decl", "declaration_elements", "", "unsupported",
+            source_url=declaration.SOURCE_URL,
+            evidence="中国海关官方申报要素表未找到对应 HS 分组。",
+            reason="官方 CusMerchElement 表未匹配到该 HS 的申报要素，字段保持 unsupported。",
+            confidence="unsupported", caveat="未生成任何申报要素，避免编造。",
+        ))
     return records
 
 
