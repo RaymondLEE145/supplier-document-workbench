@@ -213,7 +213,8 @@ createApp({
       return ["", "UPLOAD DOCUMENTS", "IDENTIFY · STRUCTURE", "HUMAN REVIEW", "EXPORT · TEMPLATE FILL"][this.step];
     },
     stepTitle() {
-      return ["", "上传单证", "识别结果", "人工校对", "汇总导出"][this.step];
+      if (this.step === 4) return this.scope === "all" ? "集货汇总导出" : "当前供应商导出";
+      return ["", "上传单证", "识别结果", "人工校对", "导出"][this.step];
     },
     stepSubtitle() {
       return [
@@ -314,7 +315,8 @@ createApp({
       this.step = (s.items || 0) > 0 ? 2 : 1;
     },
     scopeSupplier() {
-      const pick = this.suppliers.find((s) => s.id === this.activeId) || this.suppliers[0];
+      const pick = this.suppliers.find((s) => s.id === this.supplierId)
+        || this.suppliers.find((s) => s.id === this.activeId) || this.suppliers[0];
       if (pick) this.selectSupplier(pick);
       else this.toast("还没有供应商，请先新建", "error");
     },
@@ -638,36 +640,6 @@ createApp({
         this.toast("目标模板已替换并通过 5-Sheet 校验", "success");
       } catch (err) {
         this.toast(`模板上传失败：${err.message}`, "error");
-      }
-    },
-    async importBackup(e) {
-      const f = e.target.files && e.target.files[0];
-      e.target.value = "";
-      if (!f) return;
-      const fd = new FormData();
-      fd.append("file", f, f.name);
-      try {
-        const r = await API.send("/api/backup/import", "POST", fd);
-        await this.loadState();
-        if (r.supplier) { this.supplierId = r.supplier.id; this.scope = "supplier"; }
-        this.toast("备份已导入（文件需重新上传后再次解析）", "success");
-      } catch (err) {
-        this.toast(`导入备份失败：${err.message}`, "error");
-      }
-    },
-    async downloadBackup(s) {
-      try {
-        const r = await fetch(`/api/suppliers/${s.id}/backup`, { method: "POST" });
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const blob = await r.blob();
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `backup_${s.name}.json`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-        this.toast("供应商备份已下载", "success");
-      } catch (e) {
-        this.toast(`备份失败：${e.message}`, "error");
       }
     },
     openNewSupplier() { this.newSupplierName = ""; this.modal.supplier = true; },
