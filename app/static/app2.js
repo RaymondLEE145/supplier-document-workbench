@@ -327,6 +327,23 @@ createApp({
       await this.loadState();
       this.step = this.analysisItems.length ? 2 : 1;
     },
+    async exportScopeSupplier() {
+      const pick = this.suppliers.find((s) => s.id === this.supplierId)
+        || this.suppliers.find((s) => s.id === this.activeId) || this.suppliers[0];
+      if (!pick) { this.toast("还没有供应商，请先新建", "error"); return; }
+      this.scope = "supplier";
+      this.supplierId = pick.id;
+      this.autoSupplemented = false;
+      await this.loadState();
+      this.step = 4;
+    },
+    async exportScopeAll() {
+      this.scope = "all";
+      this.supplierId = null;
+      this.autoSupplemented = false;
+      await this.loadState();
+      this.step = 4;
+    },
     goUpload() {
       if (this.scope !== "supplier") this.scopeSupplier();
       this.step = 1;
