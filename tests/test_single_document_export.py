@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Regression: single-document uploads must not populate unrelated sheets."""
+"""Regression: single-document uploads only fill document-specific sheets, while customs
+declaration and official declaration elements are generated from HS/product data."""
 import json
 import sys
 from pathlib import Path
@@ -7,7 +8,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from openpyxl import load_workbook
 
-from app.services import parser, merge, template_engine
+from app.services import parser, merge, template_engine, declaration
+from app.services.exporter import validate_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 TPL = ROOT / "assets" / "template.xlsx"
@@ -20,46 +22,53 @@ CASES = {
 }
 
 
-def blank(ws, row, col):
-    v = ws.cell(row=row, column=col).value
-    return v in (None, "")
-
-
 def run(name: str, path: Path) -> dict:
     doc = parser.parse_file(path, path.name)
-    if not doc.get("ok"):
-        raise SystemExit(f"parse failed {name}: {doc.get('error')}")
+    assert doc.get("ok"), doc
     analysis = merge.aggregate([{**doc, "file_id": "f1", "supplier_id": "s1", "filename": path.name, "status": "parsed"}],
                                [{"id": "s1", "name": "TEST"}])
     coverage = analysis["coverage"]
+    declaration.enrich(analysis["items"])
     payload = {"doc": analysis["doc"], "items": analysis["items"], "coverage": coverage}
     out = OUT / f"single_{name}.xlsx"
     template_engine.fill_workbook(TPL, payload, out)
     wb = load_workbook(out, data_only=False)
     report = {"case": name, "type": doc.get("type"), "items": len(analysis["items"]),
               "coverage": coverage, "file": str(out)}
-    packing = next(s for s in wb.worksheets if "装箱" in s.title)
-    invoice = next(s for s in wb.worksheets if "发票" in s.title)
-    sales = next(s for s in wb.worksheets if "销售" in s.title or "销货" in s.title)
-    customs = next(s for s in wb.worksheets if "报关" in s.title)
-    decl = next(s for s in wb.worksheets if "申报" in s.title)
+    packing = wb.worksheets[0]
+    invoice = wb.worksheets[1]
+    decl = wb.worksheets[2]
+    sales = wb.worksheets[3]
+    customs = wb.worksheets[4]
     report["packing_C6"] = packing["C6"].value
     report["invoice_J10"] = invoice["J10"].value
+    report["decl_C5"] = decl["C5"].value
+    report["decl_D5"] = decl["D5"].value
+    report["decl_B5"] = decl["B5"].value
+    report["decl_F5"] = decl["F5"].value
     report["sales_H21"] = sales["H21"].value
     report["customs_B20"] = customs["B20"].value
-    report["decl_C5"] = decl["C5"].value
+    report["customs_D20"] = customs["D20"].value
+    report["customs_I20"] = customs["I20"].value
     if name == "packing_only":
-        assert coverage["packing_list"] and not coverage["invoice"], coverage
+        assert coverage["packing_list"] and not coverage["invoice"] and not coverage["sales_confirmation"], coverage
+        assert coverage["customs_declaration"] and coverage["declaration_elements"]
         assert packing["C6"].value, "packing sheet not filled"
-        for label, ws, coord in (("invoice", invoice, "J10"), ("sales", sales, "H21"),
-                                 ("customs", customs, "B20"), ("decl", decl, "C5")):
-            assert blank(ws, int("".join(filter(str.isdigit, coord))), ws[coord].column), f"{label} not blank: {ws[coord].value}"
+        assert invoice["J10"].value in (None, ""), "invoice must be blank"
+        assert sales["H21"].value in (None, ""), "sales must be blank"
+        assert customs["B20"].value, "customs item HS missing"
+        assert decl["C5"].value, "declaration name missing"
+        assert decl["D5"].value, "declaration HS missing"
     if name == "invoice_only":
-        assert coverage["invoice"] and not coverage["packing_list"], coverage
+        assert coverage["invoice"] and not coverage["packing_list"] and not coverage["sales_confirmation"], coverage
         assert invoice["J10"].value not in (None, ""), "invoice amount missing"
-        for label, ws, coord in (("packing", packing, "C6"), ("sales", sales, "H21"),
-                                 ("customs", customs, "B20"), ("decl", decl, "C5")):
-            assert blank(ws, int("".join(filter(str.isdigit, coord))), ws[coord].column), f"{label} not blank: {ws[coord].value}"
+        assert packing["C6"].value in (None, ""), "packing must be blank"
+        assert sales["H21"].value in (None, ""), "sales must be blank"
+        assert customs["B20"].value, "customs item HS missing"
+        assert decl["C5"].value, "declaration name missing"
+    v = validate_workbook(TPL, out, payload)
+    report["validation"] = {"ok": v["ok"], "passed": v["passed"], "failed": v["failed"], "warnings": v["warnings"]}
+    assert v["ok"], [c for c in v["checks"] if not c["ok"]]
     return report
 
 
