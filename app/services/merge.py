@@ -256,7 +256,7 @@ def aggregate(documents: list[dict], suppliers: list[dict]) -> dict:
     office_map = [("NINGBO", "宁波海关"), ("SHENZHEN", "深圳海关"), ("GUANGZHOU", "广州海关"), ("SHANGHAI", "上海海关"), ("TIANJIN", "天津海关")]
     customs_office = next((v for k, v in office_map if k in loading_port.upper()), "")
     supplier_name = supplier_names[0] if supplier_names else ""
-    multi = len(supplier_names) > 1
+    multi = len({d.get("supplier_id") for d in docs}) > 1
     doc = {
         "scope": "all" if len({d.get("supplier_id") for d in docs}) > 1 else "supplier",
         "supplier_id": docs[0].get("supplier_id") if docs else None,
@@ -311,8 +311,8 @@ def aggregate(documents: list[dict], suppliers: list[dict]) -> dict:
         "packing_list": any(t in {"packing_list", "combined"} for t in source_types),
         "invoice": any(t in {"invoice", "combined"} for t in source_types),
         "sales_confirmation": "contract" in source_types,
-        "customs_declaration": bool(aggregated),
-        "declaration_elements": bool(aggregated),
+        "customs_declaration": bool(aggregated) and not multi,
+        "declaration_elements": bool(aggregated) and not multi,
     }
     doc["source_types"] = source_types
     doc["coverage"] = coverage
