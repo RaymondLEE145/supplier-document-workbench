@@ -223,8 +223,8 @@ def _public_state(scope: str = "all", supplier_id: str | None = None, full_recor
                 "packing_list": bool(types & {"packing_list", "combined"}),
                 "invoice": bool(types & {"invoice", "combined"}),
                 "sales_confirmation": "contract" in types,
-                "customs_declaration": "customs_declaration" in types,
-                "declaration_elements": bool(types & {"declaration_elements", "customs_declaration"}),
+                "customs_declaration": bool(analysis_public.get("items") or []),
+                "declaration_elements": bool(analysis_public.get("items") or []),
             }
         analysis_public = dict(analysis_public)
         analysis_public["doc"] = doc_public
