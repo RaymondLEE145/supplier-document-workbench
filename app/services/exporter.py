@@ -15,7 +15,7 @@ from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
 from ..config import OUTPUT_DIR, SCRIPT_DIR, new_id, now_iso
-from . import codegen
+from . import codegen, declaration
 from .compliance import reconcile
 
 
@@ -75,8 +75,8 @@ def build_payload(analysis: dict, compliance: dict, *, acknowledge_unsupported: 
             "packing_list": bool(types & {"packing_list", "combined"}),
             "invoice": bool(types & {"invoice", "combined"}),
             "sales_confirmation": "contract" in types,
-            "customs_declaration": "customs_declaration" in types,
-            "declaration_elements": bool(types & {"declaration_elements", "customs_declaration"}),
+            "customs_declaration": bool(items),
+            "declaration_elements": bool(items),
         }
     coverage = {k: bool(coverage.get(k)) for k in ("packing_list", "invoice", "sales_confirmation",
                                                     "customs_declaration", "declaration_elements")}
@@ -100,6 +100,7 @@ def build_payload(analysis: dict, compliance: dict, *, acknowledge_unsupported: 
         else:
             it["preference"] = pref[:40]
         it["destination_country"] = it.get("destination_country") or doc.get("destination_country") or ""
+    declaration.enrich(items)
     payload = {
         "meta": {
             "generated_at": now_iso(),
@@ -297,7 +298,7 @@ def validate_workbook(template_path: Path, output_path: Path, payload: dict) -> 
                 if str(ws[f"D{r}"].value or "") != f"=销货确认书!C{21 + idx}":
                     bad.append(f"D{r}")
             else:
-                if str(ws[f"D{r}"].value or "") != str(it.get("name_zh") or it.get("name_en") or ""):
+                if str(ws[f"D{r}"].value or "").split(" / ")[0] != str(it.get("name_zh") or it.get("name_en") or ""):
                     bad.append(f"D{r}")
                 if str(ws[f"I{r}"].value or "") != str(it.get("pieces") or ""):
                     bad.append(f"I{r}")
