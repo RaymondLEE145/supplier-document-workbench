@@ -120,6 +120,33 @@ SHEET_ALIASES = {
 }
 
 
+SKIP_VALUE_CELLS = {
+    "packing_list": ["C3"],
+    "invoice": ["C6", "J3", "J4", "J5"],
+    "declaration_elements": ["C2", "G2", "C3"],
+    "sales_confirmation": ["C3", "C4", "C5", "H3", "H4", "H5", "C11", "C12",
+                           "B24", "B25", "A26", "F26", "B30", "B34"],
+    "customs_declaration": ["A4", "E4", "H4", "O4", "A6", "E6", "H6", "K6", "A8", "E8",
+                            "H8", "K8", "E10", "H10", "K10", "A12", "E12", "H12", "K12",
+                            "N12", "A14", "E14", "F14", "H14", "J14", "A16", "A18"],
+}
+
+
+def _blank_skipped_sheet(ws, role: str, data_start: int) -> None:
+    """Keep labels/styles, but clear values and sample rows for an unuploaded document."""
+    for coord in SKIP_VALUE_CELLS.get(role, []):
+        try:
+            ws[coord] = None
+        except Exception:
+            pass
+    for row in ws.iter_rows(min_row=data_start):
+        for cell in row:
+            try:
+                cell.value = None
+            except AttributeError:
+                pass
+
+
 def _canon_sheet(name: str) -> str | None:
     n = (name or "").strip()
     if n in SHEET_ALIASES:
@@ -237,10 +264,11 @@ def _fill_header(ws, role: str, doc: dict, items: list[dict], layout: dict) -> N
         if consignee:
             ws["C3"] = consignee
             ws["C3"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=False)
-        packing = _text(doc.get("packing") or "纸箱包装")
+        packing = _text(doc.get("packing") or "")
         note_row = layout.get("packing_note_row") or (layout["total_row"] + 2)
-        ws[f"A{note_row}"] = f"包装方式：{packing}"
-        ws[f"A{note_row}"].alignment = Alignment(horizontal="left", vertical="center")
+        if packing:
+            ws[f"A{note_row}"] = f"包装方式：{packing}"
+            ws[f"A{note_row}"].alignment = Alignment(horizontal="left", vertical="center")
         # helper totals outside the print area (kept from the original workbook convention)
         total_row = layout["total_row"]
         ws[f"O{total_row}"] = sum(int(i.get("cartons") or 0) for i in items)
@@ -317,20 +345,21 @@ def _fill_header(ws, role: str, doc: dict, items: list[dict], layout: dict) -> N
         delta = layout.get("sales_delta", 0)
         if doc.get("packing"):
             ws[f"B{24 + delta}"] = _text(doc.get("packing"))
-        ws[f"B{25 + delta}"] = "Time of Shipment: On or before: ASAP"
         if doc.get("loading_port"):
             port = _text(doc.get("loading_port"))
-            ws[f"A{26 + delta}"] = f"5.装运口岸和目的地: {port} → {_text(doc.get('destination_country') or 'AUSTRALIA')}"
+            dest = _text(doc.get("destination_country") or "")
+            ws[f"A{26 + delta}"] = f"5.装运口岸和目的地: {port}" + (f" → {dest}" if dest else "")
             ws[f"E{26 + delta}"] = ""
-        ws[f"F{26 + delta}"] = _text(doc.get("destination_country") or "AUSTRALIA")
-        ws[f"F{26 + delta}"].alignment = Alignment(horizontal="left", vertical="center")
+        if doc.get("destination_country"):
+            ws[f"F{26 + delta}"] = _text(doc.get("destination_country"))
+            ws[f"F{26 + delta}"].alignment = Alignment(horizontal="left", vertical="center")
         if doc.get("remarks"):
             ws[f"B{34 + delta}"] = _text(doc.get("remarks"))
         if doc.get("shipping_mark"):
             ws[f"B{30 + delta}"] = _text(doc.get("shipping_mark"))
     elif role == "customs_declaration":
         office = _text(doc.get("customs_office") or "")
-        ws["H4"] = office or "(XX海关)"
+        ws["H4"] = office
         if doc.get("pre_entry_no"):
             ws["A4"] = f"预录入编号: {doc['pre_entry_no']}"
         if doc.get("customs_no"):
@@ -342,33 +371,44 @@ def _fill_header(ws, role: str, doc: dict, items: list[dict], layout: dict) -> N
             ws["H6"] = _text(doc.get("date"))
             ws["K6"] = _text(doc.get("date"))
         ws["A8"] = _text(doc.get("consignee") or doc.get("buyer"))
-        ws["E8"] = _text(doc.get("transport") or "海运")
+        ws["E8"] = _text(doc.get("transport") or "")
         if doc.get("vessel"):
             ws["H8"] = _text(doc.get("vessel"))
         if doc.get("bl_no"):
             ws["K8"] = _text(doc.get("bl_no"))
-        ws["E10"] = _text(doc.get("supervision_mode") or "一般贸易")
-        ws["H10"] = _text(doc.get("tax_mode") or "一般征税")
+        ws["E10"] = _text(doc.get("supervision_mode") or "")
+        ws["H10"] = _text(doc.get("tax_mode") or "")
         if doc.get("license_no"):
             ws["K10"] = _text(doc.get("license_no"))
         ws["A12"] = _text(doc.get("contract_no"))
-        ws["E12"] = f"=销货确认书!F{layout.get('sales_port_row', 26)}"
-        ws["H12"] = "澳大利亚"
+        cov = doc.get("coverage") or {}
+        if cov.get("sales_confirmation"):
+            ws["E12"] = f"=销货确认书!F{layout.get('sales_port_row', 26)}"
+        else:
+            ws["E12"] = ""
+        ws["H12"] = _text(doc.get("destination_country") or "")
         if doc.get("destination_port"):
             ws["K12"] = _text(doc.get("destination_port"))
         if doc.get("loading_port"):
             ws["N12"] = _text(doc.get("loading_port"))
-        ws["A14"] = "纸箱"
+        ws["A14"] = _text(doc.get("packing") or "")
         total_cartons = sum(int(i.get("cartons") or 0) for i in items)
         total_gross = sum(_num(i.get("gross_weight")) for i in items)
         total_net = sum(_num(i.get("net_weight")) for i in items)
         ws["E14"] = total_cartons
         ws["F14"] = round(total_gross, 2)
         ws["H14"] = round(total_net, 2)
-        ws["J14"] = _text(doc.get("incoterm") or "CIF")
-        ws["A16"] = "发票、装箱单、合同"
+        ws["J14"] = _text(doc.get("incoterm") or "")
+        present = []
+        if cov.get("invoice"):
+            present.append("发票")
+        if cov.get("packing_list"):
+            present.append("装箱单")
+        if cov.get("sales_confirmation"):
+            present.append("合同")
+        ws["A16"] = "、".join(present)
         containers = _text(doc.get("container_no"))
-        ws["A18"] = ("N/M 集装箱标箱数及号码：" + containers) if containers else "N/M"
+        ws["A18"] = (("N/M 集装箱标箱数及号码：" + containers) if containers else "")
         ws["A18"].alignment = Alignment(horizontal="left", vertical="center", wrap_text=True)
         # align all header value cells
         for coord in ("A6", "E6", "H6", "K6", "N6", "A8", "E8", "H8", "K8", "E10", "H10", "K10",
@@ -416,17 +456,23 @@ def _write_data_rows(ws, spec: dict, items: list[dict], snap: dict) -> dict:
                 elif field == "name_zh":
                     val = _text(item.get("name_zh") or item.get("name_en"))
                 elif field in {"cartons", "pieces_per_carton", "pieces"}:
-                    val = int(item.get(field) or 0)
+                    v = item.get(field)
+                    val = "" if v in (None, "") or float(v or 0) == 0 else int(v)
                 elif field in {"unit_price"}:
-                    val = round(_num(item.get(field)), 4)
+                    v = item.get(field)
+                    val = "" if v in (None, "") or float(v or 0) == 0 else round(_num(v), 4)
                 elif field in {"amount"}:
-                    val = round(_num(item.get(field)), 2)
+                    v = item.get(field)
+                    val = "" if v in (None, "") or float(v or 0) == 0 else round(_num(v), 2)
                 elif field in {"cbm"}:
-                    val = round(_num(item.get(field)), 4)
+                    v = item.get(field)
+                    val = "" if v in (None, "") or float(v or 0) == 0 else round(_num(v), 4)
                 elif field in {"gross_weight", "net_weight"}:
-                    val = round(_num(item.get(field)), 3)
+                    v = item.get(field)
+                    val = "" if v in (None, "") or float(v or 0) == 0 else round(_num(v), 3)
                 elif field in {"length", "width", "height"}:
-                    val = round(_num(item.get(field)), 2)
+                    v = item.get(field)
+                    val = "" if v in (None, "") or float(v or 0) == 0 else round(_num(v), 2)
                 elif field == "no":
                     val = idx + 1
                 elif field == "preference":
@@ -452,13 +498,17 @@ def _write_data_rows(ws, spec: dict, items: list[dict], snap: dict) -> dict:
             name = _text(item.get("name_zh") or item.get("name_en"))
             spec_text = _text(item.get("model") or "")
             name_spec = f"{name} / {spec_text}" if name and spec_text else (name or spec_text)
-            unit = _text(item.get("unit") or "PCS")
-            qty = int(item.get("pieces") or 0)
-            unit_price = round(_num(item.get("unit_price")), 4)
-            amount = round(_num(item.get("amount")), 2)
-            currency = _text(item.get("currency") or "USD")
-            origin = _text(item.get("origin") or "中国")
-            dest = _text(item.get("destination_country") or "澳大利亚")
+            unit = _text(item.get("unit") or "")
+            qty = item.get("pieces")
+            qty = int(qty) if qty not in (None, "") and int(qty or 0) != 0 else ""
+            up = item.get("unit_price")
+            unit_price = round(_num(up), 4) if up not in (None, "") and float(up or 0) != 0 else ""
+            amt = item.get("amount")
+            amount = round(_num(amt), 2) if amt not in (None, "") and float(amt or 0) != 0 else ""
+            currency = _text(item.get("currency") or "")
+            origin = _text(item.get("origin") or "")
+            dest = _text(item.get("destination_country") or "")
+            amount_text = f"{amount} {currency}".strip() if amount != "" else ""
             source = _text(item.get("source_province") or item.get("domestic_source") or "")
             exempt = _text(item.get("exemption") or "")
             ws.cell(row=base, column=1, value=idx + 1)
@@ -469,7 +519,7 @@ def _write_data_rows(ws, spec: dict, items: list[dict], snap: dict) -> dict:
             ws.cell(row=base, column=8, value=unit)
             ws.cell(row=base, column=9, value=qty)
             ws.cell(row=base, column=10, value=unit_price)
-            ws.cell(row=base, column=11, value=f"{amount} {currency}")
+            ws.cell(row=base, column=11, value=amount_text)
             ws.cell(row=base, column=12, value=origin)
             ws.cell(row=base, column=13, value=dest)
             ws.cell(row=base, column=14, value=source)
@@ -584,14 +634,20 @@ def fill_workbook(template_path: str | Path, payload: dict, output_path: str | P
     doc = payload.get("doc") or {}
     if not items:
         raise ValueError("payload.items 为空，无法生成模板")
-    report = {"sheets": [], "items": len(items), "formulas": [], "warnings": []}
+    report = {"sheets": [], "items": len(items), "formulas": [], "warnings": [], "skipped": []}
     totals_by_role = {}
+    coverage = payload.get("coverage") or {}
     for ws in wb.worksheets:
         canon = _canon_sheet(ws.title)
         if not canon:
             report["warnings"].append(f"未识别的 Sheet：{ws.title}，已原样保留")
             continue
         spec = SHEET_SPECS[canon]
+        if coverage and not coverage.get(spec["role"], True):
+            _blank_skipped_sheet(ws, spec["role"], spec["data_start"])
+            report["skipped"].append({"name": ws.title, "role": spec["role"],
+                                      "reason": "未上传对应类型单证，保持模板空白，不补造数据"})
+            continue
         snap = _capture(ws)
         _clear_sheet(ws)
         # header
@@ -643,19 +699,20 @@ def fill_workbook(template_path: str | Path, payload: dict, output_path: str | P
             ws[f"H{total_row}"] = f"=SUM(H{layout['data_start']}:H{layout['data_end']})"
             report["formulas"].append(f"{ws.title}!H{total_row}")
         elif spec["role"] == "customs_declaration":
-            # preserve same-sheet + cross-sheet formulas
+            # cross-sheet formulas only if the contract sheet was actually populated
             ws["A10"] = "=A6"
             report["formulas"].append(f"{ws.title}!A10")
-            sc = wb["销货确认书"] if "销货确认书" in wb.sheetnames else None
-            if sc is not None:
+            if coverage.get("sales_confirmation") and "销货确认书" in wb.sheetnames:
                 for idx in range(len(items)):
                     base = layout["data_start"] + idx * 2
                     sc_row = 21 + idx
                     ws.cell(row=base, column=4, value=f"=销货确认书!C{sc_row}")
                     ws.cell(row=base, column=9, value=f"=销货确认书!F{sc_row}")
                     report["formulas"].extend([f"{ws.title}!D{base}", f"{ws.title}!I{base}"])
-            ws["E12"] = f"=销货确认书!F{sales_port_row}"
-            report["formulas"].append(f"{ws.title}!E12")
+                ws["E12"] = f"=销货确认书!F{sales_port_row}"
+                report["formulas"].append(f"{ws.title}!E12")
+            else:
+                ws["E12"] = ""
         # page setup: fit to one page wide, landscape
         try:
             ws.page_setup.orientation = "landscape"
