@@ -20,7 +20,6 @@ from .config import (ALLOWED_EXTENSIONS, ASSETS_DIR, DATA_DIR, DEFAULT_TEMPLATE,
                      OUTPUT_DIR, SCRIPT_DIR, STATIC_DIR, TEMPLATE_DIR, UPLOAD_DIR, load_settings,
                      new_id, now_iso, safe_filename, save_settings)
 from .services import codegen, compliance as compliance_service, exporter, parser, template_engine
-from .services import backup as backup_service
 from .services import jobs as job_service
 from .services.merge import aggregate
 from .store import (file_sha256, find_supplier, inspect_template, load_state, log_activity, mutate,
@@ -414,52 +413,6 @@ def activate_supplier(supplier_id: str) -> dict:
     return {"ok": True}
 
 
-@app.post("/api/suppliers/{supplier_id}/backup")
-def backup_supplier(supplier_id: str) -> FileResponse:
-    state = snapshot()
-    s = find_supplier(state, supplier_id)
-    if not s:
-        raise HTTPException(404, "供应商不存在")
-    files = supplier_files(state, supplier_id)
-    docs = supplier_documents(state, supplier_id)
-    analysis = (state.get("analyses") or {}).get("by_supplier", {}).get(supplier_id)
-    backup = {"version": 1, "created_at": now_iso(), "supplier": s,
-              "backup_dir": str(backup_service.BACKUP_ROOT / supplier_id),
-              "files": [{k: f.get(k) for k in ("id", "filename", "hash", "size", "ext", "status", "uploaded_at", "backup_path")} for f in files],
-              "documents": [{k: d.get(k) for k in ("id", "filename", "type", "fields", "items", "warnings")} for d in docs],
-              "analysis": analysis}
-    path = DATA_DIR / f"backup_{safe_filename(s['name'])}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    path.write_text(json.dumps(backup, ensure_ascii=False, indent=1), encoding="utf-8")
-    return FileResponse(path, filename=path.name, media_type="application/json")
-
-
-@app.post("/api/backup/import")
-async def import_backup(file: UploadFile = File(...)) -> dict:
-    raw = await file.read()
-    try:
-        data = json.loads(raw.decode("utf-8"))
-    except Exception as exc:
-        raise HTTPException(400, f"备份文件无法解析：{exc}")
-    sup = data.get("supplier") or {}
-    name = str(sup.get("name") or "导入的供应商").strip()
-    new_sup = {"id": new_id("sup_"), "name": name, "created_at": now_iso(), "color": "gold"}
-    def _apply(state):
-        state.setdefault("suppliers", []).append(new_sup)
-        state["active_supplier_id"] = new_sup["id"]
-        for d in data.get("documents") or []:
-            doc = dict(d)
-            doc["id"] = new_id("doc_")
-            doc["supplier_id"] = new_sup["id"]
-            doc["file_id"] = None
-            doc["status"] = "parsed" if doc.get("items") else "failed"
-            state.setdefault("documents", []).append(doc)
-        _recompute_analyses(state)
-        _invalidate_compliance(state)
-        log_activity(state, "supplier", f"导入供应商备份：{name}（{len(data.get('documents') or [])} 份单证记录）")
-    mutate(_apply)
-    return {"ok": True, "supplier": new_sup}
-
-
 @app.post("/api/settings")
 def update_settings(payload: dict) -> dict:
     current = load_settings()
@@ -535,9 +488,30 @@ async def upload(supplier_id: str = Form(...), files: list[UploadFile] = File(..
         stored = UPLOAD_DIR / f"{file_id}_{filename}"
         stored.write_bytes(raw)
         digest = file_sha256(stored)
-        backup_path = backup_service.backup_upload(supplier_id, stored, filename, digest, len(raw))
         saved.append({"ok": True, "file_id": file_id, "filename": filename, "stored_name": stored.name,
-                      "path": str(stored), "backup_path": backup_path, "hash": digest, "size": len(raw), "ext": ext})
+                      "path": str(stored), "hash": digest, "size": len(raw), "ext": ext})
+    # A new upload replaces the supplier's previous files/analysis. Never append
+    # to an existing supplier or carry previous rows into this export.
+    if any(s.get("ok") for s in saved):
+        old_paths: list[str] = []
+        def _clear(state):
+            for f in state.get("files") or []:
+                if f.get("supplier_id") == supplier_id and f.get("path"):
+                    old_paths.append(str(f.get("path")))
+            state["files"] = [f for f in state.get("files") or [] if f.get("supplier_id") != supplier_id]
+            state["documents"] = [d for d in state.get("documents") or [] if d.get("supplier_id") != supplier_id]
+            by = (state.get("analyses") or {}).get("by_supplier") or {}
+            by.pop(supplier_id, None)
+            _invalidate_compliance(state)
+        mutate(_clear)
+        for p in old_paths:
+            try:
+                Path(p).unlink(missing_ok=True)
+            except Exception:
+                pass
+        backup_dir = DATA_DIR / "supplier_backups" / supplier_id
+        if backup_dir.exists():
+            shutil.rmtree(backup_dir, ignore_errors=True)
     job = job_service.create("upload", {"supplier_id": supplier_id, "files": [s.get("filename") for s in saved]})
 
     def _work(job_id: str):
@@ -555,11 +529,15 @@ async def upload(supplier_id: str = Form(...), files: list[UploadFile] = File(..
                     dup = ef
                     break
             if dup:
+                try:
+                    Path(item["path"]).unlink(missing_ok=True)
+                except Exception:
+                    pass
+                item["path"] = ""
                 def _dup(state):
                     state.setdefault("files", []).append({
                         "id": item["file_id"], "supplier_id": supplier_id, "filename": item["filename"],
-                        "stored_name": item["stored_name"], "path": item["path"], "hash": item["hash"],
-                        "backup_path": item.get("backup_path"),
+                        "stored_name": "", "path": "", "hash": item["hash"],
                         "size": item["size"], "ext": item["ext"], "status": "duplicate", "uploaded_at": now_iso(),
                         "error": f"与已有文件重复（{dup.get('filename')}）", "document_id": None,
                     })
@@ -569,11 +547,16 @@ async def upload(supplier_id: str = Form(...), files: list[UploadFile] = File(..
                 job_service.log(job_id, f"{item['filename']} 重复，已按 Hash 去重", phase="去重")
                 continue
             result = parser.parse_file(Path(item["path"]), item["filename"])
+            # Keep only structured parse results; never retain the uploaded binary.
+            try:
+                Path(item["path"]).unlink(missing_ok=True)
+            except Exception:
+                pass
+            item["path"] = ""
             doc_id = new_id("doc_")
             file_record = {
                 "id": item["file_id"], "supplier_id": supplier_id, "filename": item["filename"],
-                "stored_name": item["stored_name"], "path": item["path"], "hash": item["hash"],
-                "backup_path": item.get("backup_path"),
+                "stored_name": "", "path": "", "hash": item["hash"],
                 "size": item["size"], "ext": item["ext"], "uploaded_at": now_iso(),
                 "status": "parsed" if result.get("ok") else "failed",
                 "document_id": doc_id if result.get("ok") else None,
@@ -886,4 +869,12 @@ def _bootstrap(state: dict) -> None:
 
 
 with __import__("contextlib").suppress(Exception):
+    # The workbench keeps structured rows only. Never retain uploaded binaries,
+    # supplier backup folders or old backup JSON files.
+    shutil.rmtree(DATA_DIR / "supplier_backups", ignore_errors=True)
+    for p in DATA_DIR.glob("backup_*.json"):
+        p.unlink(missing_ok=True)
+    for p in UPLOAD_DIR.glob("*"):
+        if p.is_file():
+            p.unlink(missing_ok=True)
     mutate(_bootstrap)
