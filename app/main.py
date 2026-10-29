@@ -754,9 +754,6 @@ def export_endpoint(payload: dict) -> dict:
     tpl_path = Path(tpl.get("path") or TEMPLATE_DIR / "template.xlsx")
     if not tpl_path.exists():
         raise HTTPException(400, "目标模板不存在")
-    gate = _compliance_gate(state, analysis, scope, supplier_id)
-    if gate.get("needs_run"):
-        raise HTTPException(409, gate.get("reason") or "请先运行智能补充")
     job = job_service.create("export", {"scope": scope, "supplier_id": supplier_id})
 
     def _work(job_id: str):
