@@ -46,8 +46,8 @@ def _customs_office(loading_port: str) -> str:
 def build_payload(analysis: dict, compliance: dict, *, acknowledge_unsupported: bool = False) -> tuple[dict, dict]:
     items, gate = reconcile(analysis.get("items") or [], compliance or {})
     gate["acknowledge_unsupported"] = bool(acknowledge_unsupported)
-    if not gate.get("ok") and not acknowledge_unsupported:
-        raise ExportBlocked("合规校验未通过：存在未确认的溯源数据或缺少 HS 编码，已阻断导出。", gate)
+    # Missing HS / unconfirmed supplements do not block download. They are marked
+    # red in the workbook so the user can fill them manually after export.
     if not items:
         raise ExportBlocked("没有可导出的货物行。", gate)
     doc = dict(analysis.get("doc") or {})
