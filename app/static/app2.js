@@ -163,23 +163,23 @@ createApp({
     gateLabel() {
       if (this.gate.ok) return "PASSED";
       if (this.gate.needs_run) return "NOT RUN";
-      if ((this.gate.missing_hs || []).length) return "MISSING HS";
+      if ((this.gate.missing_hs || []).length) return "MISSING HS · 可导出";
       if ((this.gate.unconfirmed || []).length) return "UNCONFIRMED";
       return "REVIEW";
     },
     gateTitle() {
       if (this.gate.ok) return "合规门禁已通过";
       if (this.gate.needs_run) return "尚未运行智能补充";
-      if ((this.gate.missing_hs || []).length) return "缺少 HS 编码，导出已阻断";
-      if ((this.gate.unconfirmed || []).length) return "存在未确认的溯源数据";
-      return "请检查合规字段";
+      if ((this.gate.missing_hs || []).length) return "有 HS 编码缺失，仍可导出";
+      if ((this.gate.unconfirmed || []).length) return "有未确认的溯源数据，仍可导出";
+      return "有字段待补录，仍可导出";
     },
     gateDescription() {
       if (this.gate.ok) return "所有 supported 字段均已人工确认；可以生成代码并回填模板。";
-      if (this.gate.needs_run) return "先运行智能补充，获取中国海关 / ABF 官方证据；未确认的补充数据不会进入导出。";
-      if ((this.gate.missing_hs || []).length) return "至少一个商品项没有 10 位 HS 编码。可运行智能补充或人工补充官方证据。";
-      if ((this.gate.unconfirmed || []).length) return "请打开溯源卡片，确认全部 supported 值；未确认前导出按钮不会执行。";
-      return "请检查模板映射与补充状态。";
+      if (this.gate.needs_run) return "可以先运行智能补充；不运行也可以导出，缺失的 HS 会在 Excel 中用红色底框标出。";
+      if ((this.gate.missing_hs || []).length) return "导出后缺失 HS 的单元格会用红色底框标记，请在 Excel 中手动补录；不会阻断下载。";
+      if ((this.gate.unconfirmed || []).length) return "导出仍可执行；未确认的补充值保持空白，并在 Excel 中标记。";
+      return "导出仍可执行；缺失字段会用红色底框标记。";
     },
     confirmedCount() {
       return (this.compliance.records || []).filter((r) => r.confirmed).length;
