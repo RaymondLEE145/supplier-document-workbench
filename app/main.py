@@ -707,35 +707,59 @@ def confirm_compliance(payload: dict) -> dict:
 
 @app.post("/api/compliance/manual")
 def manual_evidence(payload: dict) -> dict:
-    """Allow the user to attach an authoritative manual citation for a missing HS code."""
+    """Accept a user-supplied HS code without blocking on official-site lookup.
+
+    The value is stored as a manual, reviewable entry. It clears the missing-HS
+    block immediately; the exported workbook still flags any other blanks red.
+    """
     item_id = payload.get("item_id")
-    code = str(payload.get("hs_code") or "").strip()
+    raw_code = str(payload.get("hs_code") or "").strip()
+    digits = re.sub(r"\D", "", raw_code)
+    if not item_id or not digits:
+        raise HTTPException(400, "请至少填写货物行和 HS 编码")
+    if len(digits) > 12:
+        digits = digits[:12]
     url = str(payload.get("source_url") or "").strip()
     evidence = str(payload.get("matched_evidence") or "").strip()
-    if not (item_id and code and url and evidence):
-        raise HTTPException(400, "item_id / hs_code / source_url / matched_evidence 均不能为空")
-    res = compliance_service.query_tariff(code)
-    if not res.get("ok"):
-        raise HTTPException(400, "该 HS 编码未在海关官网税号库中查到，不能作为有据补充")
-    row = next((r for r in res["rows"] if str(r.get("codeTs")) == re.sub(r"\D", "", code)), None)
-    if not row:
-        raise HTTPException(400, "海关官网未精确匹配该 10 位编码")
     rec = {
         "id": new_id("cmp_manual_"), "item_id": item_id, "item_name": payload.get("item_name", ""),
-        "field": "hs_code", "field_label": "HS 编码", "value": code,
+        "field": "hs_code", "field_label": "HS 编码", "value": digits,
         "original_value": payload.get("original_value", ""), "status": "supported",
-        "source_url": url, "retrieved_at": now_iso(), "matched_evidence": evidence,
-        "reason": "用户提供的官方溯源证据；编码同时经 online.customs.gov.cn 税号库校验。",
-        "confidence": "manual", "caveat": compliance_service.CUSTOMS_DISCLAIMER, "confirmed": True,
-        "extra": {"gName": row.get("gName"), "impOrdinaryRate": row.get("impOrdinaryRate")},
+        "source_url": url or "manual://user-entered", "retrieved_at": now_iso(),
+        "matched_evidence": evidence or "用户人工补录，未提供官方逐字证据。",
+        "reason": "用户人工补录 HS；平台不强制官网校验，导出时按待人工核实处理。",
+        "confidence": "manual-unverified", "caveat": "人工补录值，请以实际通关时海关解释为准。",
+        "confirmed": True, "manual": True, "verified": False,
+        "extra": {"manual_input": raw_code},
     }
     def _apply(state):
         comp = state.get("compliance") or {}
-        comp.setdefault("records", []).append(rec)
+        records = comp.setdefault("records", [])
+        # The manual value replaces any previous HS record for this item.
+        comp["records"] = [r for r in records if not (r.get("item_id") == item_id and r.get("field") == "hs_code")]
+        comp["records"].append(rec)
+        # Apply immediately to the standard rows so the next export uses it.
+        by = (state.get("analyses") or {}).get("by_supplier") or {}
+        for sid, analysis in by.items():
+            for it in analysis.get("items") or []:
+                if it.get("id") == item_id:
+                    it["hs_code"] = digits
+                    it["manual_hs"] = True
+                    it["hs_verified"] = False
+                    comp["scope"] = "supplier"
+                    comp["supplier_id"] = sid
+                    comp["items_signature"] = _items_signature(analysis)
+        all_a = (state.get("analyses") or {}).get("all")
+        if all_a:
+            for it in all_a.get("items") or []:
+                if it.get("id") == item_id:
+                    it["hs_code"] = digits
+                    it["manual_hs"] = True
+                    it["hs_verified"] = False
         state["compliance"] = comp
-        log_activity(state, "manual", f"人工补充 HS {code} 并通过官网校验")
+        log_activity(state, "manual", f"用户人工补录 HS {digits}（不阻断导出）")
     mutate(_apply)
-    return {"ok": True, "record": rec}
+    return {"ok": True, "verified": False, "record": rec}
 
 
 # ---------------------------------------------------------------------------
