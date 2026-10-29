@@ -616,19 +616,19 @@
   <div v-if="modal.manual" class="modal-mask" @click.self="modal.manual=false">
     <div class="modal">
       <div class="modal-head"><div><p class="eyebrow">MANUAL EVIDENCE</p><h3>人工补充 HS 编码</h3></div><button class="modal-x" @click="modal.manual=false">×</button></div>
-      <p class="modal-sub">只接受可在官方页面逐字核对的证据，并会再次调用 online.customs.gov.cn 校验 10 位税号。</p>
+      <p class="modal-sub">人工补录会直接写入，不再强制官网校验；导出时未核实字段仍会标红，不阻断下载。</p>
       <label class="field-label">选择货物行</label>
       <select class="text-input" v-model="manual.item_id">
         <option value="">请选择</option>
         <option v-for="it in analysisItems" :key="it.id" :value="it.id">{{ it.name_zh || it.name_en }} · {{ it.hs_code || '缺 HS' }}</option>
       </select>
-      <label class="field-label">10 位 HS 编码</label>
+      <label class="field-label">HS 编码（可含点号）</label>
       <input class="text-input" v-model="manual.hs_code" placeholder="例如 9401790000" />
-      <label class="field-label">官方来源 URL</label>
+      <label class="field-label">来源 URL（可选）</label>
       <input class="text-input" v-model="manual.source_url" placeholder="https://online.customs.gov.cn/..." />
-      <label class="field-label">逐字证据（复制官网原文）</label>
-      <textarea class="text-input" rows="3" v-model="manual.matched_evidence" placeholder="例如：9401790000 其他金属框架的坐具"></textarea>
-      <div class="modal-actions"><button class="btn btn-ghost" @click="modal.manual=false">取消</button><button class="btn btn-gold" @click="submitManual">校验并写入</button></div>
+      <label class="field-label">证据原文（可选）</label>
+      <textarea class="text-input" rows="3" v-model="manual.matched_evidence" placeholder="人工补录说明，可不填"></textarea>
+      <div class="modal-actions"><button class="btn btn-ghost" @click="modal.manual=false">取消</button><button class="btn btn-gold" @click="submitManual">确认写入并允许导出</button></div>
     </div>
   </div>
 
