@@ -60,7 +60,7 @@
 - 每个 supported 值必须有 `source_url`、`retrieved_at`、`matched_evidence`；没有证据的字段保持 `unsupported` 并置灰。
 - 申报要素来自中国海关官方 `CusMerchElement` 通关参数表：按 4/5/6/8 位 HS 分组抓取，`source_url` 指向官方页面。
 - 官方表只规定要素名称/是否必填，不提供产品材质/用途值；这些值优先取单证，缺失时用可复核的规则推断，并保留官方要素文本。
-- 未确认的 supported 补充、缺失 HS 均阻断导出。
+- 未确认的 supported 补充或缺失 HS **不再阻断导出**；对应单元格用红色底框 + 批注标记，导出后可在 Excel 中手动补录。
 
 ### 2.6 代码生成与导出
 
