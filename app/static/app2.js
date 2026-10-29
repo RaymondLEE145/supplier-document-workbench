@@ -620,9 +620,8 @@ createApp({
     },
     async startExport() {
       if (this.exportBusy) return;
-      if (this.gate.needs_run) { this.runSupplement(); return; }
-      if ((this.gate.unconfirmed || []).length) { this.openSupplement(); this.toast("请先确认全部溯源数据", "error"); return; }
-      if ((this.gate.missing_hs || []).length) { this.openManualHs(); this.toast("请先补齐缺失的 HS 编码", "error"); return; }
+      // Missing HS / unconfirmed evidence is allowed: the workbook marks those
+      // cells red so the user can fill them after download.
       this.exportBusy = true;
       this.exportJob = { status: "running", progress: 3, phase: "准备", message: "正在校验合规门禁与模板…" };
       try {
@@ -738,14 +737,14 @@ createApp({
       this.modal.manual = true;
     },
     async submitManual() {
-      if (!this.manual.item_id || !this.manual.hs_code || !this.manual.source_url || !this.manual.matched_evidence) {
-        this.toast("请填写货物行、HS 编码、官方 URL 与逐字证据", "error"); return;
+      if (!this.manual.item_id || !this.manual.hs_code) {
+        this.toast("请至少填写货物行和 HS 编码", "error"); return;
       }
       try {
-        await API.send("/api/compliance/manual", "POST", this.manual);
+        const r = await API.send("/api/compliance/manual", "POST", this.manual);
         this.modal.manual = false;
         await this.loadState();
-        this.toast("人工证据已通过官网校验并写入", "success");
+        this.toast(r && r.verified === false ? "人工 HS 已写入（待核实），可直接导出" : "人工 HS 已写入，可直接导出", "success");
       } catch (e) {
         this.toast(`人工补充失败：${e.message}`, "error");
       }
