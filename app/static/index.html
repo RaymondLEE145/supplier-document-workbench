@@ -425,10 +425,10 @@
                   <p v-if="scope==='all' && suppliers.length>1" class="coverage-tip">集货汇总只合并装箱单/发票/合同；报关单和申报要素不跨供应商合并，请切换到每个供应商分别导出。</p>
                 </div>
                 <div v-if="(gate.unconfirmed || []).length" class="alert alert-warn compact">
-                  有 {{ gate.unconfirmed.length }} 条补充数据尚未确认，导出已阻断。请打开溯源卡片逐条确认。
+                  有 {{ gate.unconfirmed.length }} 条补充数据尚未确认；仍可导出，未确认项会以红色底框标记。
                 </div>
-                <div v-if="(gate.missing_hs || []).length" class="alert alert-danger compact">
-                  有 {{ gate.missing_hs.length }} 个商品缺少 HS 编码。请先运行智能补充，或使用「人工补充 HS」。
+                <div v-if="(gate.missing_hs || []).length" class="alert alert-warn compact">
+                  有 {{ gate.missing_hs.length }} 个商品缺少 HS 编码。仍可导出；对应单元格会用红色底框标记，请在 Excel 中手动补录。
                   <button class="link-btn dark" @click="openManualHs">人工补充 HS →</button>
                 </div>
               </div>
@@ -442,7 +442,7 @@
                   <span>我已知悉 {{ gate.unsupported_required.length }} 个申报要素字段无官方来源，仍继续导出（不会编造值）</span>
                 </label>
                 <div class="export-actions">
-                  <button class="btn btn-navy big" :disabled="exportBusy || !analysisItems.length || (!gate.ok && !gate.needs_run && (gate.unconfirmed || []).length)" @click="startExport">
+                  <button class="btn btn-navy big" :disabled="exportBusy || !analysisItems.length" @click="startExport">
                     <span v-if="exportBusy" class="spinner"></span>
                     {{ exportBusy ? '正在生成并校验…' : (scope === 'all' ? '集货汇总导出 Excel →' : '当前供应商导出 Excel →') }}
                   </button>
