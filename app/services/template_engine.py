@@ -17,7 +17,8 @@ from pathlib import Path
 from typing import Any
 
 from openpyxl import load_workbook
-from openpyxl.styles import Alignment
+from openpyxl.comments import Comment
+from openpyxl.styles import Alignment, Border, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 # ---------------------------------------------------------------------------
@@ -629,6 +630,31 @@ def _format_data(ws, role: str, rows: list[int], spec: dict) -> None:
                 ws.cell(row=r, column=c).number_format = "0.00" if c == 10 else "0"
 
 
+def _mark_missing_hs(ws, role: str, items: list[dict], layout: dict, spec: dict, report: dict) -> None:
+    """Mark missing HS cells with a red border/fill so the user can fill them later."""
+    if role not in {"packing_list", "invoice", "declaration_elements", "customs_declaration"}:
+        return
+    col = spec["columns"].get("hs_code")
+    if not col:
+        return
+    fill = PatternFill("solid", fgColor="FFC7CE")
+    border = Border(left=Side(style="medium", color="C00000"),
+                    right=Side(style="medium", color="C00000"),
+                    top=Side(style="medium", color="C00000"),
+                    bottom=Side(style="medium", color="C00000"))
+    block = 2 if role == "customs_declaration" else 1
+    start = layout["data_start"]
+    for idx, item in enumerate(items):
+        if str(item.get("hs_code") or "").strip():
+            continue
+        row = start + idx * block
+        cell = ws.cell(row=row, column=col)
+        cell.fill = fill
+        cell.border = border
+        cell.comment = Comment("HS 编码缺失：未在中澳协定 / ABF / 中国海关找到可核验编码，请手动补录。", "Supplier Workbench")
+        report.setdefault("missing_cells", []).append(f"{ws.title}!{cell.coordinate}")
+
+
 def fill_workbook(template_path: str | Path, payload: dict, output_path: str | Path) -> dict:
     """Fill the 5-sheet template, preserving styles and repairing formulas."""
     template_path = Path(template_path)
@@ -691,6 +717,7 @@ def fill_workbook(template_path: str | Path, payload: dict, output_path: str | P
             "sales_port_row": sales_port_row,
         })
         _format_data(ws, spec["role"], list(range(layout["data_start"], layout["data_end"] + 1)), spec)
+        _mark_missing_hs(ws, spec["role"], items, layout, spec, report)
         # formulas
         if spec["role"] == "packing_list":
             for col in ("L", "M"):
